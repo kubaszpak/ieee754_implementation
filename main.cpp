@@ -2,7 +2,7 @@
 #include <iostream> // std::cout
 #include <string>   // std::string
 #include <bitset>   // std::bitset
-#include <cassert>  //
+#include <cassert>  // 
 
 using namespace std;
 
@@ -17,7 +17,7 @@ class IEEE_754
     //    Exponent width: 8 bits
     //    Significand precision: 24 bits (23 explicitly stored)
 private:
-    bitset<number_bits> number;
+    bitset<32> number;
 
 public:
     IEEE_754(string numb)
@@ -95,8 +95,8 @@ void IEEE_754::convert_to_IEEE(bitset<32> binary_number, bool sign)
     int base_2;
     for (base_2 = 1; base_2 < (1 << (exponent_bits - 1)); (base_2 <<= 1))
 
-    // exponent += 2 ^ (exponent_bits - 1) - 1;
-    exponent += base_2;
+        // exponent += 2 ^ (exponent_bits - 1) - 1;
+        exponent += base_2;
     cout << "exponent z obc = " << exponent << endl;
 
     // 1|11111110|0011111110000111111 1 111 <- 32 bity
@@ -120,11 +120,11 @@ void IEEE_754::convert_to_IEEE(bitset<32> binary_number, bool sign)
 
     cout << "exponent bits = " << exponent_bit << endl;
 
-    bitset<23> multiplier();
+    bitset<23> multiplier;
 
     // cout << binary_number[2] << endl;
     // multiplier[21] = 1;
-    // cout << multiplier[22] << endl;
+    // cout << multiplier[21] << endl;
 
     // for (size_t i = 0; i < exponent_before; i++)
     // {
@@ -132,11 +132,14 @@ void IEEE_754::convert_to_IEEE(bitset<32> binary_number, bool sign)
     // }
     // cout << "petelka wzor = " << multiplier << endl;
 
-    // for (size_t i = mantissa_bits - 1, size_t j = 0; i >= (mantissa_bits - exponent_before); i--, j++)
-    // {
-    //     multiplier[i] = binary_number[exponent_before - 1 - j];
-    // }
-    // cout << "Multiplier = " << multiplier << endl;
+    size_t j = 0;
+
+    for (size_t i = mantissa_bits - 1; i >= (mantissa_bits - exponent_before); i--)
+    {
+        multiplier[i] = binary_number[exponent_before - 1 - j];
+        j++;
+    }
+    cout << "Multiplier = " << multiplier << endl;
 
     // this->number
     bitset<32> whole_number;
@@ -145,17 +148,6 @@ void IEEE_754::convert_to_IEEE(bitset<32> binary_number, bool sign)
 
     cout << whole_number << endl;
 
-    // for (size_t i = 23; i <= 30; i++)
-    // {
-    //     pieknaliczbawieee[i] = expo[i];
-    // }
-
-    // for (size_t i = 0; i < 23; i++)
-    // {
-    //     pieknaliczbawieee[i] = multiplier[i];
-    // }
-
-    // cout<<"jezu jaka piekna = "<<pieknaliczbawieee<<endl;
 }
 
 // int IEEE_754::copy_bits(){
@@ -200,13 +192,13 @@ string IEEE_754::to_string()
 int main()
 {
 
-    IEEE_754 number1("1011");
-    bitset<32> dsfdsf(0b1010);
-    number1.convert_to_IEEE(dsfdsf, 1);
+    IEEE_754 number1("1010");
+    bitset<32> number2(0b1010);
+    number1.convert_to_IEEE(number2, 1);
 
-    IEEE_754 number2(0b1011);
     IEEE_754 number3(0b1011);
-    IEEE_754 number4(0x1011);
+    IEEE_754 number4(0b1011);
+    IEEE_754 number5(0x1011);
 
     // IEEE_754 number5();
     // IEEE_754 number5(1011.0);
