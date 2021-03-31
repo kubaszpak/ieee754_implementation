@@ -37,6 +37,7 @@ public:
     void view_number();
     string to_string();
     void convert_to_IEEE(bitset<32> number, bool sign);
+    bitset<32> getFractionalPartOfNumber(const string& str);
 
     static void add(IEEE_754 number1, IEEE_754 number2)
     {
@@ -47,6 +48,7 @@ public:
         bitset<32> numb1 = number1.number;
         bitset<32> numb2 = number2.number;
         bitset<32> result;
+        
 
         assert(numb1.size() == numb2.size());
 
@@ -68,6 +70,32 @@ public:
         return;
     }
 };
+
+bitset<32> IEEE_754::getFractionalPartOfNumber(const string& str){
+    for (char const &c : str) {
+        if (isdigit(c) == 0){
+            if(c != ',' && c!='.')
+            {
+                cout << "given string is not a number!" <<endl;
+                return bitset<32>(0b11111111111111111111111111111111);
+            }
+        } 
+    }
+
+    int indexOfComma = 0;
+    for(char const &c : str){
+        if(c == ',' || c == '.'){
+            cout<< "comma on " << indexOfComma << " index" <<endl;
+        }
+        indexOfComma++;
+    }
+
+    // CDN
+    return true;
+}
+
+
+
 void IEEE_754::convert_to_IEEE(bitset<32> binary_number, bool sign)
 { // 1010 = 2^3* 1.010
 
@@ -199,6 +227,12 @@ int main()
     IEEE_754 number3(0b1011);
     IEEE_754 number4(0b1011);
     IEEE_754 number5(0x1011);
+
+    number4.getFractionalPartOfNumber("fds");
+    number4.getFractionalPartOfNumber("111.1");
+
+    // IEEE_754 numberTest("1011,1");
+    // numberTest.getFractionalPartOfNumber("11111,1");
 
     // IEEE_754 number5();
     // IEEE_754 number5(1011.0);
