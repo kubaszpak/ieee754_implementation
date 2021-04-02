@@ -2,13 +2,9 @@
 #include <iostream> // std::cout
 #include <string>   // std::string
 #include <bitset>   // std::bitset
-#include <cassert>  // 
+#include <cassert>  //
 
 using namespace std;
-
-const uint8_t number_bits = 32;
-const uint8_t mantissa_bits = 23;
-const uint8_t exponent_bits = 8;
 
 class IEEE_754
 {
@@ -20,9 +16,13 @@ private:
     bitset<32> number;
 
 public:
+    static constexpr uint8_t number_bits = 32;
+    static constexpr uint8_t mantissa_bits = 23;
+    static constexpr uint8_t exponent_bits = 8;
     IEEE_754(string numb)
     {
         number = bitset<32>(string(numb)); // "3.5" 0xaf
+        // this->getFractionalPartOfNumber(numb);
     }
 
     IEEE_754(int numb)
@@ -37,7 +37,7 @@ public:
     void view_number();
     string to_string();
     void convert_to_IEEE(bitset<32> number, bool sign);
-    bitset<32> getFractionalPartOfNumber(const string& str);
+    bitset<32> getFractionalPartOfNumber(const string &str);
 
     static void add(IEEE_754 number1, IEEE_754 number2)
     {
@@ -48,7 +48,6 @@ public:
         bitset<32> numb1 = number1.number;
         bitset<32> numb2 = number2.number;
         bitset<32> result;
-        
 
         assert(numb1.size() == numb2.size());
 
@@ -71,30 +70,34 @@ public:
     }
 };
 
-bitset<32> IEEE_754::getFractionalPartOfNumber(const string& str){
-    for (char const &c : str) {
-        if (isdigit(c) == 0){
-            if(c != ',' && c!='.')
+bitset<32> IEEE_754::getFractionalPartOfNumber(const string &str)
+{
+    for (char const &c : str)
+    {
+        if (isdigit(c) == 0)
+        {
+            if (c != ',' && c != '.')
             {
-                cout << "given string is not a number!" <<endl;
+                cout << "given string is not a number!" << endl;
                 return bitset<32>(0b11111111111111111111111111111111);
             }
-        } 
+        }
     }
 
     int indexOfComma = 0;
-    for(char const &c : str){
-        if(c == ',' || c == '.'){
-            cout<< "comma on " << indexOfComma << " index" <<endl;
+    for (char const &c : str)
+    {
+        if (c == ',' || c == '.')
+        {
+            cout << "comma on " << indexOfComma << " index" << endl;
         }
         indexOfComma++;
     }
 
+    cout << "test" << endl;
     // CDN
     return true;
 }
-
-
 
 void IEEE_754::convert_to_IEEE(bitset<32> binary_number, bool sign)
 { // 1010 = 2^3* 1.010
@@ -162,6 +165,8 @@ void IEEE_754::convert_to_IEEE(bitset<32> binary_number, bool sign)
 
     size_t j = 0;
 
+    // int x = 0b01010;
+
     for (size_t i = mantissa_bits - 1; i >= (mantissa_bits - exponent_before); i--)
     {
         multiplier[i] = binary_number[exponent_before - 1 - j];
@@ -175,7 +180,6 @@ void IEEE_754::convert_to_IEEE(bitset<32> binary_number, bool sign)
     whole_number[31] = sign;
 
     cout << whole_number << endl;
-
 }
 
 // int IEEE_754::copy_bits(){
