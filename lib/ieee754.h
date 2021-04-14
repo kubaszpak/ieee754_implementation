@@ -21,7 +21,7 @@ private:
 public:
     IEEE_754(std::bitset<number_bits> ieee_number = 0);
 
-    int get_number() const;
+    const std::bitset<number_bits> &get_number() const;
 
     void display_in_decimal() const;
 

@@ -4,9 +4,9 @@ IEEE_754::IEEE_754(std::bitset<IEEE_754::number_bits> ieee_number /* 0 */) : num
 {
 }
 
-int IEEE_754::get_number() const
+const std::bitset<IEEE_754::number_bits> &IEEE_754::get_number() const
 {
-    return number.to_ulong();
+    return number;
 }
 
 void IEEE_754::display_in_decimal() const
@@ -198,34 +198,36 @@ IEEE_754 IEEE_754::operator+(const IEEE_754 &different_number)
     return result;
 }
 
-// int main()
-// {
-//     IEEE_754 number1(std::bitset<32>(0b00000011011100011100000000000000));
-//     IEEE_754 number2(std::bitset<32>(0b00000011111100010100010001000100));
-//     IEEE_754 number3(std::bitset<32>(0b11111111100000000000000000000000));
-//     IEEE_754 number4(std::bitset<32>(0b11111111100001100000000000000000));
-//     IEEE_754 number5(std::bitset<32>(0b00000000011100000000000000000000));
-//     IEEE_754 number6(std::bitset<32>(0b00000000000000000000000000000000));
+int main()
+{
+    IEEE_754 number1(std::bitset<32>(0b00000011011100011100000000000000));
+    IEEE_754 number2(std::bitset<32>(0b00000011111100010100010001000100));
+    IEEE_754 number3(std::bitset<32>(0b11111111100000000000000000000000));
+    IEEE_754 number4(std::bitset<32>(0b11111111100001100000000000000000));
+    IEEE_754 number5(std::bitset<32>(0b00000000011100000000000000000000));
+    IEEE_754 number6(std::bitset<32>(0b00000000000000000000000000000000));
 
-//     number1.display_in_decimal();
-//     number2.display_in_decimal();
-//     number3.display_in_decimal();
-//     number4.display_in_decimal();
-//     number5.display_in_decimal();
-//     number6.display_in_decimal();
+    number1.display_in_decimal();
+    number2.display_in_decimal();
+    number3.display_in_decimal();
+    number4.display_in_decimal();
+    number5.display_in_decimal();
+    number6.display_in_decimal();
 
-//     // std::cout << number1.get_number() << std::endl;
-//     // std::cout << number2.get_number() << std::endl;
+    std::cout << number1.get_number() << std::endl;
+    std::cout << number2.get_number() << std::endl;
 
-//     IEEE_754 number7 = number1 + number2;
+    IEEE_754 number7 = number1 + number2;
 
-//     number7.display_in_decimal();
+    number7.display_in_decimal();
 
-//     // number1.display_in_decimal();
-//     // number2.display_in_decimal();
+    std::cout << number7.get_number() << std::endl;
 
-//     // std::cout << number1.get_number() << std::endl;
-//     // std::cout << number2.get_number() << std::endl;
+    // number1.display_in_decimal();
+    // number2.display_in_decimal();
 
-//     return 0;
-// }
+    // std::cout << number1.get_number() << std::endl;
+    // std::cout << number2.get_number() << std::endl;
+
+    return 0;
+}
