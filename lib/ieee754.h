@@ -1,4 +1,14 @@
 #include <bitset>
+#include <iostream>
+#include <cassert>
+#include <cmath>
+
+template <size_t N1>
+struct AddResult
+{
+    std::bitset<N1> result;
+    int carry_bit;
+};
 
 class IEEE_754
 {
@@ -19,7 +29,16 @@ public:
 
     std::bitset<mantissa_bits> get_mantissa_bits() const;
 
-    void opr(const IEEE_754 &different_number);
+    IEEE_754 operator+(const IEEE_754 &different_number);
 
-    void scale_mantissa(unsigned long exponent_diff, std::bitset<IEEE_754::mantissa_bits> &mantissa);
+    void scale_mantissa_down(unsigned long exponent_diff, std::bitset<IEEE_754::mantissa_bits> &mantissa);
+
+    template <size_t N1>
+    static AddResult<N1> add(const std::bitset<N1> &b1, const std::bitset<N1> &b2);
+
+    template <size_t N1, size_t N2>
+    static void paste_bits_into(const std::bitset<N1> &src, std::bitset<N2> &dst, const uint8_t dst_start_index, const uint8_t dst_end_index);
+
+    template <size_t N1, size_t N2>
+    static std::bitset<N1> get_bits(const std::bitset<N2> &b1, const uint8_t start_index, const uint8_t end_index);
 };
