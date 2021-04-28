@@ -6,6 +6,7 @@
 #include <cassert>
 #include <cmath>
 #include <string>
+#include <format>
 
 template <size_t N1>
 struct AddResult

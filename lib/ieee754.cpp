@@ -246,43 +246,43 @@ IEEE_754 IEEE_754::operator+(const IEEE_754 &different_number)
     return result;
 }
 
-// int main()
-// {
-//     IEEE_754 number1(std::bitset<32>(0b00111111110100000000000000000000));
-//     IEEE_754 number2(std::bitset<32>(0b00111111110000000000000000000000));
-//     IEEE_754 number3(std::bitset<32>(0b11111111100000000000000000000000));
-//     IEEE_754 number4(std::bitset<32>(0b11111111100001100000000000000000));
-//     IEEE_754 number5(std::bitset<32>(0b00000000011100000000000000000000));
-//     IEEE_754 number6(std::bitset<32>(0b00000000000000000000000000000000));
+int main()
+{
+    IEEE_754 number1(std::bitset<32>(0b00111111110100000000000000000000));
+    IEEE_754 number2(std::bitset<32>(0b00111111110000000000000000000000));
+    IEEE_754 number3(std::bitset<32>(0b11111111100000000000000000000000));
+    IEEE_754 number4(std::bitset<32>(0b11111111100001100000000000000000));
+    IEEE_754 number5(std::bitset<32>(0b00000000011100000000000000000000));
+    IEEE_754 number6(std::bitset<32>(0b00000000000000000000000000000000));
 
-//     std::cout << "Number1:  ";
-//     number1.display_in_decimal();
-//     std::cout << "Number2:  ";
-//     number2.display_in_decimal();
-//     IEEE_754 number7 = number1 + number2;
+    std::cout << "Number1:  ";
+    number1.display_in_decimal();
+    std::cout << "Number2:  ";
+    number2.display_in_decimal();
+    IEEE_754 number7 = number1 + number2;
 
-//     std::cout << "Przyklad dodania Number1 + Number2:  ";
-//     number7.display_in_decimal();
+    std::cout << "Przyklad dodania Number1 + Number2:  ";
+    number7.display_in_decimal();
 
-//     std::cout << "Przyklad ujemnej nieskonczonosci:  ";
+    std::cout << "Przyklad ujemnej nieskonczonosci:  ";
 
-//     number3.display_in_decimal();
-//     std::cout << "Przyklad nieliczby:  ";
+    number3.display_in_decimal();
+    std::cout << "Przyklad nieliczby:  ";
 
-//     number4.display_in_decimal();
-//     std::cout << "Przyklad liczby zdenormalizowanej:  ";
+    number4.display_in_decimal();
+    std::cout << "Przyklad liczby zdenormalizowanej:  ";
 
-//     number5.display_in_decimal();
-//     std::cout << "Przyklad zera:  ";
-//     number6.display_in_decimal();
+    number5.display_in_decimal();
+    std::cout << "Przyklad zera:  ";
+    number6.display_in_decimal();
 
-//     // std::cout << number7.get_number() << std::endl;
+    // std::cout << number7.get_number() << std::endl;
 
-//     // number1.display_in_decimal();
-//     // number2.display_in_decimal();
+    // number1.display_in_decimal();
+    // number2.display_in_decimal();
 
-//     // std::cout << number1.get_number() << std::endl;
-//     // std::cout << number2.get_number() << std::endl;
+    // std::cout << number1.get_number() << std::endl;
+    // std::cout << number2.get_number() << std::endl;
 
-//     return 0;
-// }
+    return 0;
+}
