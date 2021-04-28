@@ -34,3 +34,8 @@
 .vscode
 googletest/
 build/
+presentation.pdf
+presentation.md
+images/
+images.zip
+bitset_test.cpp
