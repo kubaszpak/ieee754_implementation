@@ -26,9 +26,7 @@ private:
 public:
     IEEE_754(std::bitset<number_of_bits> ieee_number = 0);
 
-    // const std::bitset<number_of_bits> &get_number() const;
-
-    int get_number() const;
+    const std::bitset<number_of_bits> &get_number() const;
 
     std::string display_in_decimal() const;
 
@@ -36,6 +34,14 @@ public:
 
     std::bitset<number_of_mantissa_bits> get_mantissa_bits() const;
 
+    //rounding methods 
+    void round_ties_to_even(bool r, bool s); //symetryczne do parzystej
+
+    void round_ties_to_away(bool r, bool s); //symetryczne do wiekszej wartosci bezwzglednej
+
+    void round_toward_positive(bool r, bool s); //do + niesk
+
+    void round_toward_negative(bool r, bool s); //do - niesk
     
     template <size_t N1>
     static std::bitset<N1> additive_inverse(std::bitset<N1> &mantissa);
