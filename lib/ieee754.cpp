@@ -90,6 +90,22 @@ std::bitset<IEEE_754::mantissa_bits> IEEE_754::get_mantissa_bits() const
     return std::move(mantissa);
 }
 
+template <size_t N1>
+std::bitset<N1> IEEE_754::additive_inverse(std::bitset<N1> &mantissa){
+    //reverse all bits
+    std::cout<<"before mantissa = "<< mantissa<<std::endl;
+
+    mantissa.flip();
+       
+    unsigned long ulong_mantissa = mantissa.to_ulong();
+
+    ulong_mantissa+=1;
+
+    std::cout<<"after mantissa = "<< std::bitset<N1>(ulong_mantissa)<<std::endl;
+
+    return std::bitset<N1>(ulong_mantissa);
+}
+
 void IEEE_754::scale_mantissa_down(unsigned long exponent_diff, std::bitset<IEEE_754::mantissa_bits> &mantissa)
 {
     // std::cout << exponent_diff << std::endl;
@@ -151,6 +167,44 @@ AddResult<N1> IEEE_754::add(const std::bitset<N1> &b1, const std::bitset<N1> &b2
     return {std::move(res), c};
 }
 
+
+
+IEEE_754 IEEE_754::operator-(const IEEE_754 &different_number){
+
+    auto exponent1 = this->get_exponent_bits();
+    auto exponent2 = different_number.get_exponent_bits();
+
+    auto mantissa1 = this->get_mantissa_bits();
+    auto mantissa2 = different_number.get_mantissa_bits();
+
+    unsigned long exponent1_ulong = exponent1.to_ulong();
+    unsigned long exponent2_ulong = exponent2.to_ulong();
+
+    if (exponent1_ulong > exponent2_ulong)
+    {
+        scale_mantissa_down(exponent1_ulong - exponent2_ulong, mantissa2);
+        exponent2_ulong = exponent1_ulong;
+    }
+    else if (exponent1_ulong < exponent2_ulong)
+    {
+        scale_mantissa_down(exponent2_ulong - exponent1_ulong, mantissa1);
+        exponent1_ulong = exponent2_ulong;
+    }
+
+
+
+
+
+    
+
+    IEEE_754 result;
+
+    return result;
+}
+
+
+
+
 IEEE_754 IEEE_754::operator+(const IEEE_754 &different_number)
 {
     //TODO: sign = 1 -> negative numbers
@@ -203,36 +257,46 @@ IEEE_754 IEEE_754::operator+(const IEEE_754 &different_number)
     return result;
 }
 
-// int main()
-// {
-//     IEEE_754 number1(std::bitset<32>(0b00000011011100011100000000000000));
-//     IEEE_754 number2(std::bitset<32>(0b00000011111100010100010001000100));
-//     IEEE_754 number3(std::bitset<32>(0b11111111100000000000000000000000));
-//     IEEE_754 number4(std::bitset<32>(0b11111111100001100000000000000000));
-//     IEEE_754 number5(std::bitset<32>(0b00000000011100000000000000000000));
-//     IEEE_754 number6(std::bitset<32>(0b00000000000000000000000000000000));
+int main()
+{
+    IEEE_754 number1(std::bitset<32>(0b00000011000000000000000000000000));
+    IEEE_754 number2(std::bitset<32>(0b00000011000000000000000000000000));
+    // IEEE_754 number3(std::bitset<32>(0b11111111100000000000000000000000));
+    // IEEE_754 number4(std::bitset<32>(0b11111111100001100000000000000000));
+    // IEEE_754 number5(std::bitset<32>(0b00000000011100000000000000000000));
+    // IEEE_754 number6(std::bitset<32>(0b00000000000000000000000000000000));
 
-//     number1.display_in_decimal();
-//     number2.display_in_decimal();
-//     number3.display_in_decimal();
-//     number4.display_in_decimal();
-//     number5.display_in_decimal();
-//     number6.display_in_decimal();
+    std::bitset<8> testmantissa(0b00000010);
 
-//     std::cout << number1.get_number() << std::endl;
-//     std::cout << number2.get_number() << std::endl;
+    std::cout<<testmantissa<<std::endl;
 
-//     IEEE_754 number7 = number1 + number2;
+    IEEE_754::additive_inverse(testmantissa);
 
-//     number7.display_in_decimal();
+    std::cout<<testmantissa<<std::endl;
 
-//     std::cout << number7.get_number() << std::endl;
 
-//     // number1.display_in_decimal();
-//     // number2.display_in_decimal();
 
-//     // std::cout << number1.get_number() << std::endl;
-//     // std::cout << number2.get_number() << std::endl;
+    // number1.display_in_decimal();
+    // number2.display_in_decimal();
+    // number3.display_in_decimal();
+    // number4.display_in_decimal();
+    // number5.display_in_decimal();
+    // number6.display_in_decimal();
 
-//     return 0;
-// }
+    // std::cout << number1.get_number() << std::endl;
+    // std::cout << number2.get_number() << std::endl;
+
+    // IEEE_754 number7 = number1 + number2;
+
+    // number7.display_in_decimal();
+
+    // std::cout << number7.get_number() << std::endl;
+
+    // number1.display_in_decimal();
+    // number2.display_in_decimal();
+
+    // std::cout << number1.get_number() << std::endl;
+    // std::cout << number2.get_number() << std::endl;
+
+    return 0;
+}

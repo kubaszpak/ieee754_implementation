@@ -31,7 +31,15 @@ public:
 
     std::bitset<mantissa_bits> get_mantissa_bits() const;
 
+    
+    template <size_t N1>
+    static std::bitset<N1> additive_inverse(std::bitset<N1> &mantissa);
+
     IEEE_754 operator+(const IEEE_754 &different_number);
+
+    IEEE_754 operator-(const IEEE_754 &different_number);
+
+    
 
     void scale_mantissa_down(unsigned long exponent_diff, std::bitset<IEEE_754::mantissa_bits> &mantissa);
 
