@@ -18,6 +18,10 @@ std::bitset<IEEE_754::number_of_bits> &IEEE_754::get_number()
 {
     return number;
 }
+// const std::bitset<IEEE_754::number_of_bits> &IEEE_754::get_number() const
+// {
+//     return number;
+// }
 
 std::string IEEE_754::display_in_decimal() const
 {
@@ -95,6 +99,57 @@ std::bitset<IEEE_754::number_of_mantissa_bits> IEEE_754::get_mantissa_bits() con
     }
 
     return std::move(mantissa);
+}
+
+template <size_t N1>
+std::bitset<N1> IEEE_754::additive_inverse(std::bitset<N1> &mantissa)
+{
+    //reverse all bits
+    std::cout << "before mantissa = " << mantissa << std::endl;
+
+    mantissa.flip();
+
+    unsigned long ulong_mantissa = mantissa.to_ulong();
+
+    ulong_mantissa += 1;
+
+    std::cout << "after mantissa = " << std::bitset<N1>(ulong_mantissa) << std::endl;
+
+    return std::bitset<N1>(ulong_mantissa);
+}
+
+void IEEE_754::round_ties_to_even(bool r, bool s)
+{
+    //in this round method there is no need to check sign
+
+    bool unity_bit = this->number[0];
+
+    if (unity_bit == 0 && r == 1 && s == 1)
+        unity_bit = 1;
+    else if (unity_bit == 1 && r == 1)
+    {
+        unity_bit = 0;
+        this->number[1] = 1;
+    }
+
+    this->number[0] = unity_bit;
+}
+
+void IEEE_754::round_ties_to_away(bool r, bool s)
+{
+    //in this round method there is no need to check sign
+
+    bool unity_bit = this->number[0];
+
+    if (unity_bit == 0 && (r == 1 || s == 1))
+        unity_bit = 1;
+    else if (unity_bit == 1 && (r == 1 || s == 1))
+    {
+        unity_bit = 0;
+        this->number[1] = 1;
+    }
+
+    this->number[0] = unity_bit;
 }
 
 template <size_t N1>
@@ -182,7 +237,7 @@ AddResult<N1> IEEE_754::add(const std::bitset<N1> &b1, const std::bitset<N1> &b2
     return {std::move(res), c};
 }
 
-IEEE_754 IEEE_754::operator+(const IEEE_754 &num2)
+IEEE_754 IEEE_754::operator+(const IEEE_754 &different_number)
 {
     //TODO: sign = 1 -> negative numbers
 
@@ -238,6 +293,8 @@ IEEE_754 IEEE_754::operator+(const IEEE_754 &num2)
         exponent1_ulong = 1;
     }
 
+    // TODO what if exponent == 0 -> denormalized number
+
     if (exponent1_ulong > exponent2_ulong)
     {
         scale_mantissa_down(exponent1_ulong - exponent2_ulong, mantissa2);
@@ -274,6 +331,8 @@ IEEE_754 IEEE_754::operator+(const IEEE_754 &num2)
     {
         _mantissa2[IEEE_754::number_of_mantissa_bits] = 1;
     }
+    _mantissa1[IEEE_754::number_of_mantissa_bits] = 1;
+    _mantissa2[IEEE_754::number_of_mantissa_bits] = 1;
 
     IEEE_754 result;
 
@@ -308,6 +367,11 @@ IEEE_754 IEEE_754::operator+(const IEEE_754 &num2)
 
     // TODO Round the result
     if (mantissa_result[IEEE_754::number_of_mantissa_bits + 1] == 1)
+
+        // 24 bit bitset
+        std::bitset<IEEE_754::number_of_mantissa_bits + 1> mantissa_result(mantissa1.to_ulong() + mantissa2.to_ulong());
+    // TODO Round the result
+    if (mantissa_result[number_of_mantissa_bits] == 1)
     {
         exponent1_ulong += 1;
         scale_mantissa_down(1, mantissa_result);
@@ -335,6 +399,8 @@ IEEE_754 IEEE_754::operator+(const IEEE_754 &num2)
     // TODO dodawanie mantys musimy zawierac jedynki z przodu
     // ? void IEEE_754::paste_bits_into<24u, 32u>(std::bitset<24u> const&, std::bitset<32u>&, unsigned char, unsigned char, unsigned char, unsigned char)
     result.get_number()[IEEE_754::number_of_bits - 1] = result_is_negative;
+    // TODO dodawanie mantys musimy zawierac jedynki z przodu
+    // ? void IEEE_754::paste_bits_into<24u, 32u>(std::bitset<24u> const&, std::bitset<32u>&, unsigned char, unsigned char, unsigned char, unsigned char)
     IEEE_754::paste_bits_into(mantissa_result, result.number, 0, IEEE_754::number_of_mantissa_bits - 1, 0, IEEE_754::number_of_mantissa_bits - 1);
     IEEE_754::paste_bits_into(std::bitset<IEEE_754::number_of_exponent_bits>(exponent1_ulong), result.number, IEEE_754::number_of_mantissa_bits, IEEE_754::number_of_mantissa_bits + IEEE_754::number_of_exponent_bits - 1);
 
@@ -382,11 +448,11 @@ IEEE_754 IEEE_754::operator-(const IEEE_754 &num2)
 
 //     // std::cout << number7.get_number() << std::endl;
 
-//     // number1.display_in_decimal();
-//     // number2.display_in_decimal();
+// number1.display_in_decimal();
+// number2.display_in_decimal();
 
-//     // std::cout << number1.get_number() << std::endl;
-//     // std::cout << number2.get_number() << std::endl;
+// std::cout << number1.get_number() << std::endl;
+// std::cout << number2.get_number() << std::endl;
 
-//     return 0;
-// }
+return 0;
+}

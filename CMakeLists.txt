@@ -8,7 +8,7 @@ include_directories(googletest/include) # this is so we can #include <gtest/gtes
 
 file(GLOB SOURCES
     lib/*.h
-    lib/*.cpp
+    src/*.cpp
     tests/*.cpp
 )
 
