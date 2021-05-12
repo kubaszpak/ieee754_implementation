@@ -9,6 +9,11 @@ int IEEE_754::get_sign_bit() const
     return number[IEEE_754::number_of_bits - 1];
 }
 
+void IEEE_754::flip_sign_bit()
+{
+    number[IEEE_754::number_of_bits - 1] = ~number[IEEE_754::number_of_bits - 1];
+}
+
 const std::bitset<IEEE_754::number_of_bits> &IEEE_754::get_number() const
 {
     return number;
@@ -290,7 +295,7 @@ IEEE_754 IEEE_754::operator+(const IEEE_754 &num2)
 
     if (num2_is_denormalized)
     {
-        exponent1_ulong = 1;
+        exponent2_ulong = 1;
     }
 
     // TODO what if exponent == 0 -> denormalized number
@@ -342,8 +347,8 @@ IEEE_754 IEEE_754::operator+(const IEEE_754 &num2)
     //     scale_mantissa_down(1, mantissa_result.result);
     // }
 
-    int mantissa1_signed = (sign1 == 0) ? (int)_mantissa1.to_ulong() : (int)mantissa1.to_ulong() * (-1);
-    int mantissa2_signed = (sign2 == 0) ? (int)_mantissa2.to_ulong() : (int)mantissa2.to_ulong() * (-1);
+    int mantissa1_signed = (sign1 == 0) ? static_cast<int>(_mantissa1.to_ulong()) : static_cast<int>(_mantissa1.to_ulong() * (-1));
+    int mantissa2_signed = (sign2 == 0) ? static_cast<int>(_mantissa2.to_ulong()) : static_cast<int>(_mantissa2.to_ulong() * (-1));
 
     int mantissa_add_result = mantissa1_signed + mantissa2_signed;
 
@@ -386,7 +391,7 @@ IEEE_754 IEEE_754::operator+(const IEEE_754 &num2)
     if (exponent1_ulong >= max_exponent)
     {
         exponent1_ulong = max_exponent;
-        mantissa_result = pow(2, 23) - 1;
+        mantissa_result = 0;
     }
 
     // TODO dodawanie mantys musimy zawierac jedynki z przodu
@@ -402,50 +407,52 @@ IEEE_754 IEEE_754::operator+(const IEEE_754 &num2)
     return result;
 }
 
-// IEEE_754 IEEE_754::operator-(const IEEE_754 &num2)
-// {
-//     IEEE_754 opposite_sign_num2 = num2;
-//     opposite_sign_num2.get_number()[IEEE_754::number_of_bits - 1] = !opposite_sign_num2.get_number()[IEEE_754::number_of_bits - 1];
-//     return ((*this) + opposite_sign_num2);
-// }
+IEEE_754 IEEE_754::operator-(const IEEE_754 &num2)
+{
+    IEEE_754 opposite_sign_num2 = num2;
+    opposite_sign_num2.flip_sign_bit();
+    return (operator+(opposite_sign_num2));
+}
 
-// int main()
-// {
-//     IEEE_754 number1(std::bitset<32>(0b00111111110100000000000000000000));
-//     IEEE_754 number2(std::bitset<32>(0b00111111110000000000000000000000));
-//     IEEE_754 number3(std::bitset<32>(0b11111111100000000000000000000000));
-//     IEEE_754 number4(std::bitset<32>(0b11111111100001100000000000000000));
-//     IEEE_754 number5(std::bitset<32>(0b00000000011100000000000000000000));
-//     IEEE_754 number6(std::bitset<32>(0b00000000000000000000000000000000));
+int main()
+{
+    IEEE_754 number1(std::bitset<32>(0b00111111110100000000000000000000));
+    IEEE_754 number2(std::bitset<32>(0b00111111110000000000000000000000));
+    IEEE_754 number3(std::bitset<32>(0b11111111100000000000000000000000));
+    IEEE_754 number4(std::bitset<32>(0b11111111100001100000000000000000));
+    IEEE_754 number5(std::bitset<32>(0b00000000011100000000000000000000));
+    IEEE_754 number6(std::bitset<32>(0b00000000000000000000000000000000));
 
-//     std::cout << "Number1:  ";
-//     number1.display_in_decimal();
-//     std::cout << "Number2:  ";
-//     number2.display_in_decimal();
-//     IEEE_754 number7 = number1 + number2;
+    std::cout << "Number1:  ";
+    number1.display_in_decimal();
+    std::cout << "Number2:  ";
+    number2.display_in_decimal();
+    IEEE_754 number7 = number1 - number2;
 
-//     std::cout << "Przyklad dodania Number1 + Number2:  ";
-//     number7.display_in_decimal();
+    std::cout << "Przyklad dodania Number1 - Number2:  ";
+    number7.display_in_decimal();
+    std::cout << "Przyklad Number2:  ";
+    number2.display_in_decimal();
 
-//     std::cout << "Przyklad ujemnej nieskonczonosci:  ";
+    // std::cout << "Przyklad ujemnej nieskonczonosci:  ";
 
-//     number3.display_in_decimal();
-//     std::cout << "Przyklad nieliczby:  ";
+    // number3.display_in_decimal();
+    // std::cout << "Przyklad nieliczby:  ";
 
-//     number4.display_in_decimal();
-//     std::cout << "Przyklad liczby zdenormalizowanej:  ";
+    // number4.display_in_decimal();
+    // std::cout << "Przyklad liczby zdenormalizowanej:  ";
 
-//     number5.display_in_decimal();
-//     std::cout << "Przyklad zera:  ";
-//     number6.display_in_decimal();
+    // number5.display_in_decimal();
+    // std::cout << "Przyklad zera:  ";
+    // number6.display_in_decimal();
 
-//     // std::cout << number7.get_number() << std::endl;
+    // std::cout << number7.get_number() << std::endl;
 
-// number1.display_in_decimal();
-// number2.display_in_decimal();
+    // number1.display_in_decimal();
+    // number2.display_in_decimal();
 
-// std::cout << number1.get_number() << std::endl;
-// std::cout << number2.get_number() << std::endl;
+    // std::cout << number1.get_number() << std::endl;
+    // std::cout << number2.get_number() << std::endl;
 
-// return 0;
-// }
+    return 0;
+}

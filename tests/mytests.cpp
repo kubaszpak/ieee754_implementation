@@ -95,14 +95,18 @@ TEST(IEEE_754_TEST, NaN_Add)
 
 TEST(IEEE_754_TEST, TwoBigNumbersAdd)
 {
-    IEEE_754 big_number1(std::bitset<32>(0b00111111100001100000000000000000));
-    IEEE_754 big_number2(std::bitset<32>(0b11111111100001100000000000000000));
+    IEEE_754 big_number1(std::bitset<32>(0b01111111011111111111111111111111));
+    IEEE_754 big_number2(std::bitset<32>(0b01111111011111111111111111111111));
+    IEEE_754 result = big_number1 + big_number2;
+    EXPECT_EQ(result.display_in_decimal(), "+Inf");
 }
 
 TEST(IEEE_754_TEST, TwoDenormalizedNumbersAdd){
-    
+    IEEE_754 denormalized_number1(std::bitset<32>(0b00000000010000000000000000000000));
+    IEEE_754 denormalized_number2(std::bitset<32>(0b00000000001000000000000000000000));
+    IEEE_754 result = denormalized_number1 + denormalized_number2;
+    EXPECT_EQ(result.get_number(), std::bitset<32>(0b00000000011000000000000000000000));
 }
-
 
 int main(int argc, char *argv[])
 {

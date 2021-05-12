@@ -29,6 +29,8 @@ public:
 
     std::bitset<number_of_bits> &get_number();
 
+    void flip_sign_bit();
+
     std::string display_in_decimal() const;
 
     int get_sign_bit() const;
