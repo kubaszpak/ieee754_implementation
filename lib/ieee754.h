@@ -6,7 +6,6 @@
 #include <cassert>
 #include <cmath>
 #include <string>
-#include <format>
 
 template <size_t N1>
 struct AddResult
@@ -26,17 +25,21 @@ private:
 public:
     IEEE_754(std::bitset<number_of_bits> ieee_number = 0);
 
-    // const std::bitset<number_of_bits> &get_number() const;
+    const std::bitset<number_of_bits> &get_number() const;
 
-    int get_number() const;
+    std::bitset<number_of_bits> &get_number();
 
     std::string display_in_decimal() const;
+
+    int get_sign_bit() const;
 
     std::bitset<number_of_exponent_bits> get_exponent_bits() const;
 
     std::bitset<number_of_mantissa_bits> get_mantissa_bits() const;
 
     IEEE_754 operator+(const IEEE_754 &different_number);
+
+    IEEE_754 operator-(const IEEE_754 &different_number);
 
     template <size_t N1>
     void scale_mantissa_down(unsigned long exponent_diff, std::bitset<N1> &mantissa);
