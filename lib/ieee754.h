@@ -36,7 +36,6 @@ public:
     std::bitset<number_of_exponent_bits> get_exponent_bits() const;
 
     std::bitset<number_of_mantissa_bits> get_mantissa_bits() const;
-    std::string display_in_decimal() const;
 
     //rounding methods
     void round_ties_to_even(bool r, bool s); //symetryczne do parzystej

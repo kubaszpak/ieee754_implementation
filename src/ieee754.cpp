@@ -1,4 +1,4 @@
-#include "ieee754.h"
+#include "../lib/ieee754.h"
 
 IEEE_754::IEEE_754(std::bitset<IEEE_754::number_of_bits> ieee_number /* 0 */) : number(ieee_number)
 {
@@ -237,7 +237,7 @@ AddResult<N1> IEEE_754::add(const std::bitset<N1> &b1, const std::bitset<N1> &b2
     return {std::move(res), c};
 }
 
-IEEE_754 IEEE_754::operator+(const IEEE_754 &different_number)
+IEEE_754 IEEE_754::operator+(const IEEE_754 &num2)
 {
     //TODO: sign = 1 -> negative numbers
 
@@ -331,8 +331,6 @@ IEEE_754 IEEE_754::operator+(const IEEE_754 &different_number)
     {
         _mantissa2[IEEE_754::number_of_mantissa_bits] = 1;
     }
-    _mantissa1[IEEE_754::number_of_mantissa_bits] = 1;
-    _mantissa2[IEEE_754::number_of_mantissa_bits] = 1;
 
     IEEE_754 result;
 
@@ -366,17 +364,12 @@ IEEE_754 IEEE_754::operator+(const IEEE_754 &different_number)
     }
 
     // TODO Round the result
-    if (mantissa_result[IEEE_754::number_of_mantissa_bits + 1] == 1)
-
-        // 24 bit bitset
-        std::bitset<IEEE_754::number_of_mantissa_bits + 1> mantissa_result(mantissa1.to_ulong() + mantissa2.to_ulong());
-    // TODO Round the result
-    if (mantissa_result[number_of_mantissa_bits] == 1)
+    if (mantissa_result[number_of_mantissa_bits + 1] == 1)
     {
         exponent1_ulong += 1;
         scale_mantissa_down(1, mantissa_result);
     }
-
+    // std::cout << mantissa_result << std::endl;
     while (mantissa_result[IEEE_754::number_of_mantissa_bits] == 0 && exponent1_ulong > 0)
     {
         // ? separate function scale_mantissa_up ?
@@ -409,12 +402,12 @@ IEEE_754 IEEE_754::operator+(const IEEE_754 &different_number)
     return result;
 }
 
-IEEE_754 IEEE_754::operator-(const IEEE_754 &num2)
-{
-    IEEE_754 opposite_sign_num2 = num2;
-    opposite_sign_num2.get_number()[IEEE_754::number_of_bits - 1] = !opposite_sign_num2.get_number()[IEEE_754::number_of_bits - 1];
-    return ((*this) + opposite_sign_num2);
-}
+// IEEE_754 IEEE_754::operator-(const IEEE_754 &num2)
+// {
+//     IEEE_754 opposite_sign_num2 = num2;
+//     opposite_sign_num2.get_number()[IEEE_754::number_of_bits - 1] = !opposite_sign_num2.get_number()[IEEE_754::number_of_bits - 1];
+//     return ((*this) + opposite_sign_num2);
+// }
 
 // int main()
 // {
@@ -454,5 +447,5 @@ IEEE_754 IEEE_754::operator-(const IEEE_754 &num2)
 // std::cout << number1.get_number() << std::endl;
 // std::cout << number2.get_number() << std::endl;
 
-return 0;
-}
+// return 0;
+// }
