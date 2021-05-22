@@ -7,7 +7,6 @@
 #include <cmath>
 #include <string>
 
-
 template <size_t N1>
 struct AddResult
 {

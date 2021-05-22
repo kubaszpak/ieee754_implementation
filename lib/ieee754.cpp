@@ -93,6 +93,7 @@ std::bitset<IEEE_754::number_of_mantissa_bits> IEEE_754::get_mantissa_bits() con
 }
 
 template <size_t N1>
+<<<<<<< HEAD
 std::bitset<N1> IEEE_754::additive_inverse(std::bitset<N1> &mantissa){
     //reverse all bits
     std::cout<<"before mantissa = "<< mantissa<<std::endl;
@@ -109,6 +110,8 @@ std::bitset<N1> IEEE_754::additive_inverse(std::bitset<N1> &mantissa){
 }
 
 template <size_t N1>
+=======
+>>>>>>> 7357a098e6a86b8669cb0353ebf30402306c685c
 void IEEE_754::scale_mantissa_down(unsigned long exponent_diff, std::bitset<N1> &mantissa)
 {
     // std::cout << exponent_diff << std::endl;
@@ -301,6 +304,7 @@ IEEE_754 IEEE_754::operator+(const IEEE_754 &different_number)
 
 int main()
 {
+<<<<<<< HEAD
 
     std::bitset<8> testmantissa(0b00000010);
 
@@ -352,6 +356,35 @@ int main()
     // number5.display_in_decimal();
     // std::cout << "Przyklad zera:  ";
     // number6.display_in_decimal();
+=======
+    IEEE_754 number1(std::bitset<32>(0b00111111110100000000000000000000));
+    IEEE_754 number2(std::bitset<32>(0b00111111110000000000000000000000));
+    IEEE_754 number3(std::bitset<32>(0b11111111100000000000000000000000));
+    IEEE_754 number4(std::bitset<32>(0b11111111100001100000000000000000));
+    IEEE_754 number5(std::bitset<32>(0b00000000011100000000000000000000));
+    IEEE_754 number6(std::bitset<32>(0b00000000000000000000000000000000));
+
+    std::cout << "Number1:  ";
+    number1.display_in_decimal();
+    std::cout << "Number2:  ";
+    number2.display_in_decimal();
+    IEEE_754 number7 = number1 + number2;
+
+    std::cout << "Przyklad dodania Number1 + Number2:  ";
+    number7.display_in_decimal();
+
+    std::cout << "Przyklad ujemnej nieskonczonosci:  ";
+
+    number3.display_in_decimal();
+    std::cout << "Przyklad nieliczby:  ";
+
+    number4.display_in_decimal();
+    std::cout << "Przyklad liczby zdenormalizowanej:  ";
+
+    number5.display_in_decimal();
+    std::cout << "Przyklad zera:  ";
+    number6.display_in_decimal();
+>>>>>>> 7357a098e6a86b8669cb0353ebf30402306c685c
 
     // std::cout << number7.get_number() << std::endl;
 
