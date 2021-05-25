@@ -4,10 +4,29 @@ IEEE_754::IEEE_754(std::bitset<IEEE_754::number_of_bits> ieee_number /* 0 */) : 
 {
 }
 
+int IEEE_754::get_sign_bit() const
+{
+    return number[IEEE_754::number_of_bits - 1];
+}
+
+void IEEE_754::flip_sign_bit()
+{
+    number[IEEE_754::number_of_bits - 1] = ~number[IEEE_754::number_of_bits - 1];
+}
+
 const std::bitset<IEEE_754::number_of_bits> &IEEE_754::get_number() const
 {
     return number;
 }
+
+std::bitset<IEEE_754::number_of_bits> &IEEE_754::get_number()
+{
+    return number;
+}
+// const std::bitset<IEEE_754::number_of_bits> &IEEE_754::get_number() const
+// {
+//     return number;
+// }
 
 std::string IEEE_754::display_in_decimal() const
 {
@@ -87,6 +106,23 @@ std::bitset<IEEE_754::number_of_mantissa_bits> IEEE_754::get_mantissa_bits() con
     return std::move(mantissa);
 }
 
+template <size_t N1>
+std::bitset<N1> IEEE_754::additive_inverse(std::bitset<N1> &mantissa)
+{
+    //reverse all bits
+    std::cout << "before mantissa = " << mantissa << std::endl;
+
+    mantissa.flip();
+
+    unsigned long ulong_mantissa = mantissa.to_ulong();
+
+    ulong_mantissa += 1;
+
+    std::cout << "after mantissa = " << std::bitset<N1>(ulong_mantissa) << std::endl;
+
+    return std::bitset<N1>(ulong_mantissa);
+}
+
 void IEEE_754::round_ties_to_even(bool r, bool s)
 {
     //in this round method there is no need to check sign
@@ -122,23 +158,6 @@ void IEEE_754::round_ties_to_away(bool r, bool s)
 }
 
 template <size_t N1>
-std::bitset<N1> IEEE_754::additive_inverse(std::bitset<N1> &mantissa)
-{
-    //reverse all bits
-    std::cout << "before mantissa = " << mantissa << std::endl;
-
-    mantissa.flip();
-
-    unsigned long ulong_mantissa = mantissa.to_ulong();
-
-    ulong_mantissa += 1;
-
-    std::cout << "after mantissa = " << std::bitset<N1>(ulong_mantissa) << std::endl;
-
-    return std::bitset<N1>(ulong_mantissa);
-}
-
-template <size_t N1>
 void IEEE_754::scale_mantissa_down(unsigned long exponent_diff, std::bitset<N1> &mantissa)
 {
     // std::cout << exponent_diff << std::endl;
@@ -164,6 +183,7 @@ std::bitset<N1> IEEE_754::get_bits(const std::bitset<N2> &b1, const uint8_t star
     return std::move(result);
 }
 
+// including start and end indexes
 template <size_t N1, size_t N2>
 void IEEE_754::paste_bits_into(const std::bitset<N1> &src, std::bitset<N2> &dst, const uint8_t dst_start_index, const uint8_t dst_end_index)
 {
@@ -179,6 +199,7 @@ void IEEE_754::paste_bits_into(const std::bitset<N1> &src, std::bitset<N2> &dst,
     }
 }
 
+// including start and end indexes
 template <size_t N1, size_t N2>
 void IEEE_754::paste_bits_into(const std::bitset<N1> &src, std::bitset<N2> &dst, uint8_t dst_start_index, uint8_t dst_end_index, uint8_t src_start_index, uint8_t src_end_index)
 {
@@ -198,6 +219,21 @@ void IEEE_754::paste_bits_into(const std::bitset<N1> &src, std::bitset<N2> &dst,
         dst[dst_start_index + i] = src[src_start_index + i];
     }
 }
+
+// template <size_t N1, size_t N2, size_t N3>
+// static std::bitset<N1+N2+N3> glue_bits_together( std::bitset<3> &first_bitset,  std::bitset<N2> &second_bitset,  std::bitset<N3> &third_bitset){
+
+//     cout<<"b"<<endl;
+//     size_t size = N1 + N2 + N3;
+//     std::bitset<size> stuck_bits(0);
+
+//     IEEE_754::paste_bits_into(first_bitset, stuck_bits, size-1, size - 1-N1);
+
+//     IEEE_754::paste_bits_into(second_bitset, stuck_bits, size-N1-1, size - 1-N1-N2);
+//     IEEE_754::paste_bits_into(third_bitset, stuck_bits, size-N1-N2-1, 0);
+
+//     return stuck_bits;
+// }
 
 template <size_t N1>
 AddResult<N1> IEEE_754::add(const std::bitset<N1> &b1, const std::bitset<N1> &b2)
@@ -221,65 +257,67 @@ AddResult<N1> IEEE_754::add(const std::bitset<N1> &b1, const std::bitset<N1> &b2
     return {std::move(res), c};
 }
 
-IEEE_754 IEEE_754::operator-(const IEEE_754 &different_number)
-{
-
-    auto exponent1 = this->get_exponent_bits();
-    auto exponent2 = different_number.get_exponent_bits();
-
-    auto mantissa1 = this->get_mantissa_bits();
-    auto mantissa2 = different_number.get_mantissa_bits();
-
-    unsigned long exponent1_ulong = exponent1.to_ulong();
-    unsigned long exponent2_ulong = exponent2.to_ulong();
-
-    if (exponent1_ulong > exponent2_ulong)
-    {
-        scale_mantissa_down(exponent1_ulong - exponent2_ulong, mantissa2);
-        exponent2_ulong = exponent1_ulong;
-    }
-    else if (exponent1_ulong < exponent2_ulong)
-    {
-        scale_mantissa_down(exponent2_ulong - exponent1_ulong, mantissa1);
-        exponent1_ulong = exponent2_ulong;
-    }
-
-    IEEE_754 result;
-
-    return result;
-}
-
-IEEE_754 IEEE_754::operator+(const IEEE_754 &different_number)
+IEEE_754 IEEE_754::operator+(const IEEE_754 &num2)
 {
     //TODO: sign = 1 -> negative numbers
 
-    auto exponent1 = this->get_exponent_bits();
-    auto exponent2 = different_number.get_exponent_bits();
+    int sign1 = get_sign_bit();
+    int sign2 = num2.get_sign_bit();
 
-    auto mantissa1 = this->get_mantissa_bits();
-    auto mantissa2 = different_number.get_mantissa_bits();
+    std::bitset<IEEE_754::number_of_mantissa_bits> mantissa1 = get_mantissa_bits();
+    std::bitset<IEEE_754::number_of_mantissa_bits> mantissa2 = num2.get_mantissa_bits();
 
-    // std::cout << mantissa1 << " " << mantissa2 << std::endl;
+    unsigned long exponent1_ulong = get_exponent_bits().to_ulong();
+    unsigned long exponent2_ulong = num2.get_exponent_bits().to_ulong();
 
-    unsigned long exponent1_ulong = exponent1.to_ulong();
-    unsigned long exponent2_ulong = exponent2.to_ulong();
+    // std::cout << exponent1_ulong << " " << exponent2_ulong << std::endl;
 
-    // std::cout << std::endl;
-    // std::cout << mantissa1.to_ulong() << std::endl;
-    // std::cout << mantissa2.to_ulong() << std::endl;
+    bool num1_is_denormalized = (exponent1_ulong == 0) ? true : false;
+    bool num2_is_denormalized = (exponent2_ulong == 0) ? true : false;
+
+    int max_exponent = pow(2, 8) - 1;
+
+    // NaN
+    if (exponent1_ulong == max_exponent && mantissa1.to_ulong() != 0)
+    {
+        return *(this);
+    }
+
+    if (exponent2_ulong == max_exponent && mantissa2.to_ulong() != 0)
+    {
+        return num2;
+    }
+
+    // Nieskończoności
+    if (exponent1_ulong == max_exponent && mantissa1.to_ulong() == 0)
+    {
+        if (exponent2_ulong == max_exponent && mantissa2.to_ulong() == 0 && sign1 != sign2)
+        {
+            // w tym przypadku zwraca NaN
+            return IEEE_754(std::bitset<IEEE_754::number_of_bits>(0b01111111110000000000000000000000));
+        }
+        return *(this);
+    }
+
+    if (exponent2_ulong == max_exponent && mantissa2.to_ulong() == 0)
+    {
+        return num2;
+    }
+
+    // TODO what if exponent == 0 -> denormalized number
+    if (num1_is_denormalized)
+    {
+        exponent1_ulong = 1;
+    }
+
+    if (num2_is_denormalized)
+    {
+        exponent2_ulong = 1;
+    }
 
     // TODO what if exponent == 0 -> denormalized number
 
-    if (exponent1_ulong > exponent2_ulong)
-    {
-        scale_mantissa_down(exponent1_ulong - exponent2_ulong, mantissa2);
-        exponent2_ulong = exponent1_ulong;
-    }
-    else if (exponent1_ulong < exponent2_ulong)
-    {
-        scale_mantissa_down(exponent2_ulong - exponent1_ulong, mantissa1);
-        exponent1_ulong = exponent2_ulong;
-    }
+    // std::cout << exponent1_ulong << " " << exponent2_ulong << std::endl;
 
     // std::cout << mantissa1.to_ulong() << std::endl;
     // std::cout << mantissa2.to_ulong() << std::endl;
@@ -288,10 +326,37 @@ IEEE_754 IEEE_754::operator+(const IEEE_754 &different_number)
     // adding 1 as first bit as all numbers start with 1
     std::bitset<IEEE_754::number_of_mantissa_bits + 1> _mantissa1(mantissa1.to_ulong());
     std::bitset<IEEE_754::number_of_mantissa_bits + 1> _mantissa2(mantissa2.to_ulong());
-    _mantissa1[IEEE_754::number_of_mantissa_bits] = 1;
-    _mantissa2[IEEE_754::number_of_mantissa_bits] = 1;
 
-    IEEE_754 result;
+    if (num1_is_denormalized)
+    {
+        _mantissa1[IEEE_754::number_of_mantissa_bits] = 0;
+    }
+    else
+    {
+        _mantissa1[IEEE_754::number_of_mantissa_bits] = 1;
+    }
+
+    if (num2_is_denormalized)
+    {
+        _mantissa2[IEEE_754::number_of_mantissa_bits] = 0;
+    }
+    else
+    {
+        _mantissa2[IEEE_754::number_of_mantissa_bits] = 1;
+    }
+
+    if (exponent1_ulong > exponent2_ulong)
+    {
+        // std::cout << mantissa2 << std::endl;
+        scale_mantissa_down(exponent1_ulong - exponent2_ulong, _mantissa2);
+        // std::cout << "=====" << std::endl << mantissa2 << std::endl;
+        exponent2_ulong = exponent1_ulong;
+    }
+    else if (exponent1_ulong < exponent2_ulong)
+    {
+        scale_mantissa_down(exponent2_ulong - exponent1_ulong, _mantissa1);
+        exponent1_ulong = exponent2_ulong;
+    }
 
     // auto mantissa_result = IEEE_754::add(_mantissa1, _mantissa2);
 
@@ -301,15 +366,76 @@ IEEE_754 IEEE_754::operator+(const IEEE_754 &different_number)
     //     scale_mantissa_down(1, mantissa_result.result);
     // }
 
-    // 24 bit bitset
-    std::bitset<IEEE_754::number_of_mantissa_bits + 1> mantissa_result(mantissa1.to_ulong() + mantissa2.to_ulong());
+    int mantissa1_signed = (sign1 == 0) ? static_cast<int>(_mantissa1.to_ulong()) : static_cast<int>(_mantissa1.to_ulong() * (-1));
+    int mantissa2_signed = (sign2 == 0) ? static_cast<int>(_mantissa2.to_ulong()) : static_cast<int>(_mantissa2.to_ulong() * (-1));
+
+    // std::cout << mantissa1_signed << " + " << mantissa2_signed;
+
+    int mantissa_add_result = mantissa1_signed + mantissa2_signed;
+
+    // std::cout << " = " << mantissa_add_result << std::endl;
+
+    // 25 bit bitset
+    std::bitset<IEEE_754::number_of_mantissa_bits + 2> mantissa_result;
+
+    bool result_is_negative = false;
+
+    if (mantissa_add_result >= 0)
+    {
+        mantissa_result = (unsigned long)mantissa_add_result;
+    }
+    else
+    {
+        mantissa_add_result *= (-1);
+        mantissa_result = (unsigned long)mantissa_add_result;
+        result_is_negative = true;
+    }
+
+    // std::cout << "Mantissa result: " << mantissa_result << std::endl;
+    // std::cout << "Max Exponent Unsigned Long: " << exponent1_ulong << std::endl;
+
     // TODO Round the result
-    if (mantissa_result[number_of_mantissa_bits] == 1)
+    if (mantissa_result[number_of_mantissa_bits + 1] == 1)
     {
         exponent1_ulong += 1;
         scale_mantissa_down(1, mantissa_result);
     }
 
+    // std::cout << mantissa_result << std::endl;
+    // std::cout << mantissa_add_result << std::endl;
+
+    while (mantissa_result[IEEE_754::number_of_mantissa_bits] == 0 && exponent1_ulong > 0)
+    {
+        // TODO: Jeśli pętla wykonuje się więcej niż 24 razy można dodać przerwanie i ustawić exponent1_ulong na 0
+        // std::cout << "Exponent1_ulong - 127 " << static_cast<int>(exponent1_ulong) - 127 << std::endl;
+        // std::cout << "Mantissa result " << mantissa_result << std::endl;
+        // ? separate function scale_mantissa_up ?
+        mantissa_result <<= 1;
+        exponent1_ulong -= 1;
+
+        //jesli w mantysie sa same zera, chcemy wykonac powyzsze instrukcje tylko raz
+        // if (mantissa_add_result == 0)
+        // {
+        //     break;
+        // }
+    }
+
+    if (mantissa_result[IEEE_754::number_of_mantissa_bits] == 1 && exponent1_ulong == 0)
+    {
+        mantissa_result >>= 1;
+    }
+
+    // duza wartosc
+    if (exponent1_ulong >= max_exponent)
+    {
+        exponent1_ulong = max_exponent;
+        mantissa_result = 0;
+    }
+
+    IEEE_754 result;
+    // TODO dodawanie mantys musimy zawierac jedynki z przodu
+    // ? void IEEE_754::paste_bits_into<24u, 32u>(std::bitset<24u> const&, std::bitset<32u>&, unsigned char, unsigned char, unsigned char, unsigned char)
+    result.get_number()[IEEE_754::number_of_bits - 1] = result_is_negative;
     // TODO dodawanie mantys musimy zawierac jedynki z przodu
     // ? void IEEE_754::paste_bits_into<24u, 32u>(std::bitset<24u> const&, std::bitset<32u>&, unsigned char, unsigned char, unsigned char, unsigned char)
     IEEE_754::paste_bits_into(mantissa_result, result.number, 0, IEEE_754::number_of_mantissa_bits - 1, 0, IEEE_754::number_of_mantissa_bits - 1);
@@ -320,83 +446,116 @@ IEEE_754 IEEE_754::operator+(const IEEE_754 &different_number)
     return result;
 }
 
-int main()
+IEEE_754 IEEE_754::operator-(const IEEE_754 &num2)
 {
-
-    //additive inverse
-
-    std::bitset<8> testmantissa(0b00000010);
-
-    std::cout << testmantissa << std::endl;
-
-    IEEE_754::additive_inverse(testmantissa);
-
-    std::cout << testmantissa << std::endl;
-
-    //symetryczne do parzystej
-
-    IEEE_754 roundTestNumb(std::bitset<32>(0b00111111110100000000000000000001));
-    std::cout << "RTN  = " << roundTestNumb.get_number() << std::endl;
-
-    roundTestNumb.round_ties_to_even(1, 1);
-
-    std::cout << "RTN = " << roundTestNumb.get_number() << std::endl;
-
-    IEEE_754 roundTestNumb2(std::bitset<32>(0b00111111110100000000000000000000));
-    std::cout << "RTN2 = " << roundTestNumb2.get_number() << std::endl;
-
-    roundTestNumb2.round_ties_to_away(1, 1);
-
-    std::cout << "RTN2 = " << roundTestNumb2.get_number() << std::endl;
-
-    // number1.display_in_decimal();
-    // number2.display_in_decimal();
-    // number3.display_in_decimal();
-    // number4.display_in_decimal();
-    // number5.display_in_decimal();
-    // number6.display_in_decimal();
-
-    // std::cout << number1.get_number() << std::endl;
-    // std::cout << number2.get_number() << std::endl;
-
-    // IEEE_754 number7 = number1 + number2;
-
-    // number7.display_in_decimal();
-    // IEEE_754 number1(std::bitset<32>(0b00111111110100000000000000000000));
-    // IEEE_754 number2(std::bitset<32>(0b00111111110000000000000000000000));
-    // IEEE_754 number3(std::bitset<32>(0b11111111100000000000000000000000));
-    // IEEE_754 number4(std::bitset<32>(0b11111111100001100000000000000000));
-    // IEEE_754 number5(std::bitset<32>(0b00000000011100000000000000000000));
-    // IEEE_754 number6(std::bitset<32>(0b00000000000000000000000000000000));
-
-    // std::cout << "Number1:  ";
-    // number1.display_in_decimal();
-    // std::cout << "Number2:  ";
-    // number2.display_in_decimal();
-    // IEEE_754 number7 = number1 + number2;
-
-    // std::cout << "Przyklad dodania Number1 + Number2:  ";
-    // number7.display_in_decimal();
-
-    // std::cout << "Przyklad ujemnej nieskonczonosci:  ";
-
-    // number3.display_in_decimal();
-    // std::cout << "Przyklad nieliczby:  ";
-
-    // number4.display_in_decimal();
-    // std::cout << "Przyklad liczby zdenormalizowanej:  ";
-
-    // number5.display_in_decimal();
-    // std::cout << "Przyklad zera:  ";
-    // number6.display_in_decimal();
-
-    // std::cout << number7.get_number() << std::endl;
-
-    // number1.display_in_decimal();
-    // number2.display_in_decimal();
-
-    // std::cout << number1.get_number() << std::endl;
-    // std::cout << number2.get_number() << std::endl;
-
-    return 0;
+    IEEE_754 opposite_sign_num2 = num2;
+    opposite_sign_num2.flip_sign_bit();
+    return (operator+(opposite_sign_num2));
 }
+
+// IEEE_754 IEEE_754::operator*(const IEEE_754 &num2){
+
+//     int sign1 = get_sign_bit();
+//     int sign2 = num2.get_sign_bit();
+
+//     std::bitset<IEEE_754::number_of_mantissa_bits> mantissa1 = get_mantissa_bits();
+//     std::bitset<IEEE_754::number_of_mantissa_bits> mantissa2 = num2.get_mantissa_bits();
+
+//     unsigned long exponent1_ulong = get_exponent_bits().to_ulong();
+//     unsigned long exponent2_ulong = num2.get_exponent_bits().to_ulong();
+
+//     bool num1_is_denormalized = (exponent1_ulong == 0) ? true : false;
+//     bool num2_is_denormalized = (exponent2_ulong == 0) ? true : false;
+
+//     int max_exponent = pow(2, 8) - 1;
+
+//     // NaN
+//     if (exponent1_ulong == max_exponent && mantissa1.to_ulong() != 0)
+//     {
+//         return *(this);
+//     }
+
+//     if (exponent2_ulong == max_exponent && mantissa2.to_ulong() != 0)
+//     {
+//         return num2;
+//     }
+
+//     // infinity
+//     if (exponent1_ulong == max_exponent && mantissa1.to_ulong() == 0)
+//     {   
+//         //inf *inf
+//         if (exponent2_ulong == max_exponent && mantissa2.to_ulong() == 0)
+//         {
+//             //inf * (-inf) = NAN
+//             if(sign1 != sign2) return IEEE_754(std::bitset<IEEE_754::number_of_bits>(0b01111111110000000000000000000000));
+//             // inf_same_sign * inf_same_sign = +inf
+//             else return IEEE_754(std::bitset<IEEE_754::number_of_bits>(0b01111111100000000000000000000000));
+//         }
+//         //inf * number
+//         else if(sign1 != sign2){
+//             //inf * number_different_sign
+//             return IEEE_754(std::bitset<IEEE_754::number_of_bits>(0b11111111100000000000000000000000));
+//         }
+//         //inf * number_same_sign
+//         return *(this);
+//     }
+
+//     if (exponent2_ulong == max_exponent && mantissa2.to_ulong() == 0)
+//     {
+//         if(sign1 != sign2){
+//             //inf * number_different_sign
+//             return IEEE_754(std::bitset<IEEE_754::number_of_bits>(0b11111111100000000000000000000000));
+//         }
+//         //inf * number_same_sign
+//         return num2;
+//     }
+
+
+// }
+
+// int main()
+// {
+
+//     // ------------------------------
+//     // IEEE_754 number1(std::bitset<32>(0b00111111110100000000000000000000));
+//     // IEEE_754 number2(std::bitset<32>(0b00111111110000000000000000000000));
+//     // IEEE_754 number3(std::bitset<32>(0b11111111100000000000000000000000));
+//     // IEEE_754 number4(std::bitset<32>(0b11111111100001100000000000000000));
+//     // IEEE_754 number5(std::bitset<32>(0b00000000011100000000000000000000));
+//     // IEEE_754 number6(std::bitset<32>(0b00000000000000000000000000000000));
+
+//     // std::cout << "Number1:  ";
+//     // number1.display_in_decimal();
+//     // std::cout << "Number2:  ";
+//     // number2.display_in_decimal();
+//     // IEEE_754 number7 = number1 - number2;
+
+//     // std::cout << "Przyklad dodania Number1 - Number2:  ";
+//     // number7.display_in_decimal();
+//     // std::cout << "Przyklad Number2:  ";
+//     // number2.display_in_decimal();
+
+//     // --------------------------
+
+//     // std::cout << "Przyklad ujemnej nieskonczonosci:  ";
+
+//     // number3.display_in_decimal();
+//     // std::cout << "Przyklad nieliczby:  ";
+
+//     // number4.display_in_decimal();
+//     // std::cout << "Przyklad liczby zdenormalizowanej:  ";
+
+//     // number5.display_in_decimal();
+//     // std::cout << "Przyklad zera:  ";
+//     // number6.display_in_decimal();
+
+//     // std::cout << number7.get_number() << std::endl;
+
+//     // number1.display_in_decimal();
+//     // number2.display_in_decimal();
+
+//     // std::cout << number1.get_number() << std::endl;
+//     // std::cout << number2.get_number() << std::endl;
+
+//     return 0;
+// }

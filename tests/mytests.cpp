@@ -37,32 +37,167 @@ TEST(IEEE_754_TEST, NegativeInfinity)
     EXPECT_EQ("-Inf", negative_infinity.display_in_decimal());
 }
 
-TEST(IEEE_754_TEST, Infinity)
+//addition tests
+TEST(IEEE_754_TEST, Infinity_Add)
 {
-    IEEE_754 infinity(std::bitset<32>(0b01111111100000000000000000000000));
-    EXPECT_EQ("+Inf", infinity.display_in_decimal());
-}
-
-TEST(IEEE_754_TEST, NotANumber)
-{
-    IEEE_754 nan(std::bitset<32>(0b11111111100001100000000000000000));
-    EXPECT_EQ("NaN", nan.display_in_decimal());
-}
-
-TEST(IEEE_754_TEST, NormalizedNumber)
-{
+    // number - Inf = - Inf
     IEEE_754 normalized_number(std::bitset<32>(0b00111111100001100000000000000000));
-    EXPECT_EQ("Normalized Number", normalized_number.display_in_decimal());
+    IEEE_754 infinity(std::bitset<32>(0b01111111100000000000000000000000));
+    IEEE_754 result = normalized_number + infinity;
+    EXPECT_EQ(result.get_number(), std::bitset<32>(0b01111111100000000000000000000000));
+    // check for problems with references between 
+    result.flip_sign_bit();
+    EXPECT_EQ(result.get_number(), std::bitset<32>(0b11111111100000000000000000000000));
+    EXPECT_EQ(infinity.get_number(), std::bitset<32>(0b01111111100000000000000000000000));
 }
 
-TEST(IEEE_754_TEST, RoundTieToEven)
+TEST(IEEE_754_TEST, InfinityAddMinusInfinityEqualsNaN)
 {
+    // Inf - Inf = NaN
+    IEEE_754 plus_infinity(std::bitset<32>(0b01111111100000000000000000000000));
+    IEEE_754 minus_infinity(std::bitset<32>(0b11111111100000000000000000000000));
+    IEEE_754 result = plus_infinity + minus_infinity;
+    EXPECT_EQ("NaN", result.display_in_decimal());
 }
 
-TEST(IEEE_754_TEST, RoundTieToAway)
+TEST(IEEE_754_TEST, Four_Plus_Two)
 {
+    // 4 + 2 = 6
+    IEEE_754 four(std::bitset<32>(0b01000000100000000000000000000000));
+    IEEE_754 two(std::bitset<32>(0b01000000000000000000000000000000));
+    IEEE_754 result = four + two;
+    EXPECT_EQ(result.get_number(), std::bitset<32>(0b01000000110000000000000000000000));
 }
 
+
+TEST(IEEE_754_TEST, NaN_Add)
+{
+    // number + NaN = NaN
+    IEEE_754 normalized_number(std::bitset<32>(0b00111111100001100000000000000000));
+    IEEE_754 nan(std::bitset<32>(0b11111111100001100000000000000000));
+    IEEE_754 result = normalized_number + nan;
+    EXPECT_EQ(result.get_number(), std::bitset<32>(0b11111111100001100000000000000000));
+    result = nan + normalized_number;
+    EXPECT_EQ(result.get_number(), std::bitset<32>(0b11111111100001100000000000000000));
+}
+
+TEST(IEEE_754_TEST, TwoBigNumbersAdd)
+{
+    // 3.40282346639e+38 + 3.40282346639e+38 = Inf
+    IEEE_754 big_number1(std::bitset<32>(0b01111111011111111111111111111111));
+    IEEE_754 big_number2(std::bitset<32>(0b01111111011111111111111111111111));
+    IEEE_754 result = big_number1 + big_number2;
+    EXPECT_EQ(result.display_in_decimal(), "+Inf");
+}
+
+TEST(IEEE_754_TEST, TwoDenormalizedNumbersAdd)
+{
+    // 5.87747175411e-39 + 2.93873587706e-39 = 8.81620763117e-39
+    IEEE_754 denormalized_number1(std::bitset<32>(0b00000000010000000000000000000000));
+    IEEE_754 denormalized_number2(std::bitset<32>(0b00000000001000000000000000000000));
+    IEEE_754 result = denormalized_number1 + denormalized_number2;
+    EXPECT_EQ(result.get_number(), std::bitset<32>(0b00000000011000000000000000000000));
+}
+
+//subtraction tests
+TEST(IEEE_754_TEST, Two_Denormalized_Numbers_Subtract)
+{ 
+    // denormalized - same_denormalized = 0
+    IEEE_754 denormalized_number1(std::bitset<32>(0b00000000001000000000000000000000));
+    IEEE_754 denormalized_number2(std::bitset<32>(0b00000000001000000000000000000000));
+    IEEE_754 result = denormalized_number1 - denormalized_number2;
+    
+    EXPECT_EQ(result.get_number(), std::bitset<32>(0b00000000000000000000000000000000));
+}
+
+TEST(IEEE_754_TEST, Infinity_Subtract)
+{
+    // number - Inf = -Inf
+    IEEE_754 number1(std::bitset<32>(0b00111111100001100000000000000000));
+    IEEE_754 infinity(std::bitset<32>(0b01111111100000000000000000000000));
+    IEEE_754 result = number1 - infinity;
+    EXPECT_EQ(result.get_number(), std::bitset<32>(0b11111111100000000000000000000000));
+}
+
+TEST(IEEE_754_TEST, Minus_Infinity_Subtract)
+{ 
+    // number - (-Inf) = Inf
+    IEEE_754 number1(std::bitset<32>(0b00111111100001100000000000000000));
+    IEEE_754 minus_infinity(std::bitset<32>(0b11111111100000000000000000000000));
+    IEEE_754 result = number1 - minus_infinity;
+    EXPECT_EQ(result.get_number(), std::bitset<32>(0b01111111100000000000000000000000));
+}
+
+TEST(IEEE_754_TEST, Normal_Substract_TEST1)
+{
+    // 1.25 - 1.25 = 0
+    IEEE_754 number1(std::bitset<32>(0b00111111101000000000000000000000));
+    IEEE_754 number2(std::bitset<32>(0b00111111101000000000000000000000));
+    IEEE_754 result = number1 - number2;
+    EXPECT_EQ(result.get_number(), std::bitset<32>(0b00000000000000000000000000000000));
+}
+
+TEST(IEEE_754_TEST, Normal_Substract_TEST2)
+{
+    // 1.5 - 1.25 = 0.25
+    IEEE_754 number1(std::bitset<32>(0b00111111110000000000000000000000));
+    IEEE_754 number2(std::bitset<32>(0b00111111101000000000000000000000));
+    IEEE_754 result = number1 - number2;
+    EXPECT_EQ(result.get_number(), std::bitset<32>(0b00111110100000000000000000000000));
+}
+
+TEST(IEEE_754_TEST, Normal_Substract_TEST3)
+{
+    // 4 - 2 = 2
+    IEEE_754 four(std::bitset<32>(0b01000000100000000000000000000000));
+    IEEE_754 two(std::bitset<32>(0b01000000000000000000000000000000));
+    IEEE_754 result = four - two;
+    EXPECT_EQ(result.get_number(), std::bitset<32>(0b01000000000000000000000000000000));
+}
+
+TEST(IEEE_754_TEST, Normal_Substract_TEST4)
+{
+    // 24 - 28.5 = -4.5
+    IEEE_754 four(std::bitset<32>(0b01000001110000000000000000000000));
+    IEEE_754 two(std::bitset<32>(0b01000001111001000000000000000000));
+    IEEE_754 result = four - two;
+
+    EXPECT_EQ(result.get_number(), std::bitset<32>(0b11000000100100000000000000000000));
+}
+
+// TEST(IEEE_754_TEST, InfinitySubstractMinusInfinityEqualsNaN)
+// {
+//     IEEE_754 plus_infinity(std::bitset<32>(0b01111111100000000000000000000000));
+//     IEEE_754 minus_infinity(std::bitset<32>(0b11111111100000000000000000000000));
+//     IEEE_754 result = plus_infinity + minus_infinity;
+//     EXPECT_EQ("NaN", result.display_in_decimal());
+// }
+
+// TEST(IEEE_754_TEST, NaN_Add)
+// {
+//     IEEE_754 normalized_number(std::bitset<32>(0b00111111100001100000000000000000));
+//     IEEE_754 nan(std::bitset<32>(0b11111111100001100000000000000000));
+//     IEEE_754 result = normalized_number + nan;
+//     EXPECT_EQ(result.get_number(), std::bitset<32>(0b11111111100001100000000000000000));
+//     result = nan + normalized_number;
+//     EXPECT_EQ(result.get_number(), std::bitset<32>(0b11111111100001100000000000000000));
+// }
+
+// TEST(IEEE_754_TEST, TwoBigNumbersAdd)
+// {
+//     IEEE_754 big_number1(std::bitset<32>(0b01111111011111111111111111111111));
+//     IEEE_754 big_number2(std::bitset<32>(0b01111111011111111111111111111111));
+//     IEEE_754 result = big_number1 + big_number2;
+//     EXPECT_EQ(result.display_in_decimal(), "+Inf");
+// }
+
+// TEST(IEEE_754_TEST, TwoDenormalizedNumbersAdd)
+// {
+//     IEEE_754 denormalized_number1(std::bitset<32>(0b00000000010000000000000000000000));
+//     IEEE_754 denormalized_number2(std::bitset<32>(0b00000000001000000000000000000000));
+//     IEEE_754 result = denormalized_number1 + denormalized_number2;
+//     EXPECT_EQ(result.get_number(), std::bitset<32>(0b00000000011000000000000000000000));
+// }
 
 int main(int argc, char *argv[])
 {
