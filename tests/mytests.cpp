@@ -20,6 +20,8 @@
 TEST(IEEE_754_TEST, StartAtZero)
 {
     IEEE_754 number;
+    float x = number.to_float();
+    std::cout <<"X: "<< x << std::endl;
     EXPECT_EQ("0", number.display_in_decimal());
 }
 
@@ -65,6 +67,10 @@ TEST(IEEE_754_TEST, Four_Plus_Two)
     // 4 + 2 = 6
     IEEE_754 four(std::bitset<32>(0b01000000100000000000000000000000));
     IEEE_754 two(std::bitset<32>(0b01000000000000000000000000000000));
+    float x = four.to_float();
+    float y = two.to_float();
+    std::cout <<"X: "<< x << std::endl;
+    std::cout <<"Y: "<< y << std::endl;
     IEEE_754 result = four + two;
     EXPECT_EQ(result.get_number(), std::bitset<32>(0b01000000110000000000000000000000));
 }
@@ -198,6 +204,22 @@ TEST(IEEE_754_TEST, Normal_Substract_TEST4)
 //     IEEE_754 result = denormalized_number1 + denormalized_number2;
 //     EXPECT_EQ(result.get_number(), std::bitset<32>(0b00000000011000000000000000000000));
 // }
+
+
+
+
+//multiplication tests
+
+
+TEST(IEEE_754_TEST, Normal_Multiply_TEST1)
+{
+    // 4 * 2 = 8
+    IEEE_754 four(std::bitset<32>(0b01000000100000000000000000000000));
+    IEEE_754 two(std::bitset<32>(0b01000000000000000000000000000000));
+    IEEE_754 result = four * two;
+    EXPECT_EQ(result.get_number(), std::bitset<32>(0b01000001000000000000000000000000));
+}
+
 
 int main(int argc, char *argv[])
 {

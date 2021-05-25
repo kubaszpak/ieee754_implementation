@@ -14,6 +14,12 @@ void IEEE_754::flip_sign_bit()
     number[IEEE_754::number_of_bits - 1] = ~number[IEEE_754::number_of_bits - 1];
 }
 
+float IEEE_754::to_float() const {
+    unsigned int x = static_cast<unsigned int>(number.to_ulong());
+    float y = * (float *) &x;
+    return y;
+}
+
 const std::bitset<IEEE_754::number_of_bits> &IEEE_754::get_number() const
 {
     return number;
@@ -224,7 +230,7 @@ void IEEE_754::paste_bits_into(const std::bitset<N1> &src, std::bitset<N2> &dst,
 // static std::bitset<N1+N2+N3> glue_bits_together( std::bitset<3> &first_bitset,  std::bitset<N2> &second_bitset,  std::bitset<N3> &third_bitset){
 
 //     cout<<"b"<<endl;
-//     size_t size = N1 + N2 + N3;
+//     const size_t size = N1 + N2 + N3;
 //     std::bitset<size> stuck_bits(0);
 
 //     IEEE_754::paste_bits_into(first_bitset, stuck_bits, size-1, size - 1-N1);
@@ -453,65 +459,137 @@ IEEE_754 IEEE_754::operator-(const IEEE_754 &num2)
     return (operator+(opposite_sign_num2));
 }
 
-// IEEE_754 IEEE_754::operator*(const IEEE_754 &num2){
+IEEE_754 IEEE_754::operator*(const IEEE_754 &num2){
 
-//     int sign1 = get_sign_bit();
-//     int sign2 = num2.get_sign_bit();
+    int sign1 = get_sign_bit();
+    int sign2 = num2.get_sign_bit();
 
-//     std::bitset<IEEE_754::number_of_mantissa_bits> mantissa1 = get_mantissa_bits();
-//     std::bitset<IEEE_754::number_of_mantissa_bits> mantissa2 = num2.get_mantissa_bits();
+    std::bitset<IEEE_754::number_of_mantissa_bits> mantissa1 = get_mantissa_bits();
+    std::bitset<IEEE_754::number_of_mantissa_bits> mantissa2 = num2.get_mantissa_bits();
 
-//     unsigned long exponent1_ulong = get_exponent_bits().to_ulong();
-//     unsigned long exponent2_ulong = num2.get_exponent_bits().to_ulong();
+    unsigned long exponent1_ulong = get_exponent_bits().to_ulong();
+    unsigned long exponent2_ulong = num2.get_exponent_bits().to_ulong();
 
-//     bool num1_is_denormalized = (exponent1_ulong == 0) ? true : false;
-//     bool num2_is_denormalized = (exponent2_ulong == 0) ? true : false;
+    bool num1_is_denormalized = (exponent1_ulong == 0) ? true : false;
+    bool num2_is_denormalized = (exponent2_ulong == 0) ? true : false;
 
-//     int max_exponent = pow(2, 8) - 1;
+    int max_exponent = pow(2, 8) - 1;
 
-//     // NaN
-//     if (exponent1_ulong == max_exponent && mantissa1.to_ulong() != 0)
-//     {
-//         return *(this);
-//     }
+    // NaN
+    if (exponent1_ulong == max_exponent && mantissa1.to_ulong() != 0)
+    {
+        return *(this);
+    }
 
-//     if (exponent2_ulong == max_exponent && mantissa2.to_ulong() != 0)
-//     {
-//         return num2;
-//     }
+    if (exponent2_ulong == max_exponent && mantissa2.to_ulong() != 0)
+    {
+        return num2;
+    }
 
-//     // infinity
-//     if (exponent1_ulong == max_exponent && mantissa1.to_ulong() == 0)
-//     {   
-//         //inf *inf
-//         if (exponent2_ulong == max_exponent && mantissa2.to_ulong() == 0)
-//         {
-//             //inf * (-inf) = NAN
-//             if(sign1 != sign2) return IEEE_754(std::bitset<IEEE_754::number_of_bits>(0b01111111110000000000000000000000));
-//             // inf_same_sign * inf_same_sign = +inf
-//             else return IEEE_754(std::bitset<IEEE_754::number_of_bits>(0b01111111100000000000000000000000));
-//         }
-//         //inf * number
-//         else if(sign1 != sign2){
-//             //inf * number_different_sign
-//             return IEEE_754(std::bitset<IEEE_754::number_of_bits>(0b11111111100000000000000000000000));
-//         }
-//         //inf * number_same_sign
-//         return *(this);
-//     }
+    // infinity
+    if (exponent1_ulong == max_exponent && mantissa1.to_ulong() == 0)
+    {   
+        //inf *inf
+        if (exponent2_ulong == max_exponent && mantissa2.to_ulong() == 0)
+        {
+            //inf * (-inf) = NAN
+            if(sign1 != sign2) return IEEE_754(std::bitset<IEEE_754::number_of_bits>(0b01111111110000000000000000000000));
+            // inf_same_sign * inf_same_sign = +inf
+            else return IEEE_754(std::bitset<IEEE_754::number_of_bits>(0b01111111100000000000000000000000));
+        }
+        //inf * number
+        else if(sign1 != sign2){
+            //inf * number_different_sign
+            return IEEE_754(std::bitset<IEEE_754::number_of_bits>(0b11111111100000000000000000000000));
+        }
+        //inf * number_same_sign
+        return *(this);
+    }
 
-//     if (exponent2_ulong == max_exponent && mantissa2.to_ulong() == 0)
-//     {
-//         if(sign1 != sign2){
-//             //inf * number_different_sign
-//             return IEEE_754(std::bitset<IEEE_754::number_of_bits>(0b11111111100000000000000000000000));
-//         }
-//         //inf * number_same_sign
-//         return num2;
-//     }
+    if (exponent2_ulong == max_exponent && mantissa2.to_ulong() == 0)
+    {
+        if(sign1 != sign2){
+            //inf * number_different_sign
+            return IEEE_754(std::bitset<IEEE_754::number_of_bits>(0b11111111100000000000000000000000));
+        }
+        //inf * number_same_sign
+        return num2;
+    }
+    
+    std::bitset<IEEE_754::number_of_mantissa_bits + 1> _mantissa1(mantissa1.to_ulong());
+    std::bitset<IEEE_754::number_of_mantissa_bits + 1> _mantissa2(mantissa2.to_ulong());
+
+    if (num1_is_denormalized)
+    {
+        _mantissa1[IEEE_754::number_of_mantissa_bits] = 0;
+    }
+    else
+    {
+        _mantissa1[IEEE_754::number_of_mantissa_bits] = 1;
+    }
+
+    if (num2_is_denormalized)
+    {
+        _mantissa2[IEEE_754::number_of_mantissa_bits] = 0;
+    }
+    else
+    {
+        _mantissa2[IEEE_754::number_of_mantissa_bits] = 1;
+    }
 
 
-// }
+    int mantissa_multiply_result = _mantissa1.to_ulong() * _mantissa2.to_ulong();
+
+    //------------
+
+    std::bitset<IEEE_754::number_of_mantissa_bits + 2> mantissa_result;
+
+   
+    mantissa_result = (unsigned long) mantissa_multiply_result;
+    
+    // TODO Round the result
+    if (mantissa_result[number_of_mantissa_bits + 1] == 1)
+    {
+        exponent1_ulong += 1;
+        scale_mantissa_down(1, mantissa_result);
+    }
+
+    while (mantissa_result[IEEE_754::number_of_mantissa_bits] == 0 && exponent1_ulong > 0)
+    {
+        // TODO: Jeśli pętla wykonuje się więcej niż 24 razy można dodać przerwanie i ustawić exponent1_ulong na 0
+        // std::cout << "Exponent1_ulong - 127 " << static_cast<int>(exponent1_ulong) - 127 << std::endl;
+        // std::cout << "Mantissa result " << mantissa_result << std::endl;
+        // ? separate function scale_mantissa_up ?
+        mantissa_result <<= 1;
+        exponent1_ulong -= 1;
+
+    }
+
+    if (mantissa_result[IEEE_754::number_of_mantissa_bits] == 1 && exponent1_ulong == 0)
+    {
+        mantissa_result >>= 1;
+    }
+
+    // duza wartosc
+    if (exponent1_ulong >= max_exponent)
+    {
+        exponent1_ulong = max_exponent;
+        mantissa_result = 0;
+    }
+
+    IEEE_754 result;
+    // TODO dodawanie mantys musimy zawierac jedynki z przodu
+    // ? void IEEE_754::paste_bits_into<24u, 32u>(std::bitset<24u> const&, std::bitset<32u>&, unsigned char, unsigned char, unsigned char, unsigned char)
+    result.get_number()[IEEE_754::number_of_bits - 1] = (sign1==sign2);
+    // TODO dodawanie mantys musimy zawierac jedynki z przodu
+    // ? void IEEE_754::paste_bits_into<24u, 32u>(std::bitset<24u> const&, std::bitset<32u>&, unsigned char, unsigned char, unsigned char, unsigned char)
+    IEEE_754::paste_bits_into(mantissa_result, result.number, 0, IEEE_754::number_of_mantissa_bits - 1, 0, IEEE_754::number_of_mantissa_bits - 1);
+    IEEE_754::paste_bits_into(std::bitset<IEEE_754::number_of_exponent_bits>(exponent1_ulong), result.number, IEEE_754::number_of_mantissa_bits, IEEE_754::number_of_mantissa_bits + IEEE_754::number_of_exponent_bits - 1);
+
+    // std::cout << mantissa1 << " " << mantissa2 << std::endl;
+
+    return result;
+}
 
 // int main()
 // {

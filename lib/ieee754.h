@@ -29,6 +29,8 @@ public:
 
     std::bitset<number_of_bits> &get_number();
 
+    float to_float() const;
+
     void flip_sign_bit();
 
     std::string display_in_decimal() const;
@@ -72,8 +74,8 @@ public:
     template <size_t N1, size_t N2>
     static void paste_bits_into(const std::bitset<N1> &src, std::bitset<N2> &dst, uint8_t dst_start_index, uint8_t dst_end_index, uint8_t src_start_index, uint8_t src_end_index);
 
-    template <size_t N1, size_t N2, size_t N3>
-    static std::bitset<9> glue_bits_together( std::bitset<N1> &first_bitset,  std::bitset<N2> &second_bitset,  std::bitset<N3> &third_bitset);
+    // template <size_t N1, size_t N2, size_t N3>
+    // static std::bitset<9> glue_bits_together( std::bitset<N1> &first_bitset,  std::bitset<N2> &second_bitset,  std::bitset<N3> &third_bitset);
 
     template <size_t N1, size_t N2>
     static std::bitset<N1> get_bits(const std::bitset<N2> &b1, const uint8_t start_index, const uint8_t end_index);
