@@ -25,6 +25,8 @@ private:
 public:
     IEEE_754(std::bitset<number_of_bits> ieee_number = 0);
 
+    static unsigned long pow_of_two(int n);
+
     const std::bitset<number_of_bits> &get_number() const;
 
     std::bitset<number_of_bits> &get_number();

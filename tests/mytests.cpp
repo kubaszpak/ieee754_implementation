@@ -39,6 +39,8 @@ TEST(IEEE_754_TEST, NegativeInfinity)
     EXPECT_EQ("-Inf", negative_infinity.display_in_decimal());
 }
 
+
+
 //addition tests
 TEST(IEEE_754_TEST, Infinity_Add)
 {
@@ -241,6 +243,26 @@ TEST(IEEE_754_TEST, Normal_Multiply_TEST4)
     EXPECT_EQ(result.get_number(), std::bitset<32>(0b11000001101010100000000000000000));
 }
 
+TEST(IEEE_754_TEST, Denormalized_Multiply_TEST1)
+{
+    // 1.02855755697e-38 * 9.11008121887e-38 = 0
+    IEEE_754 number1(std::bitset<32>(0b00000000011100000000000000000000));
+    IEEE_754 number2(std::bitset<32>(0b00000111110000000000000000000000));
+    IEEE_754 result = number1 * number2;
+    std::cout << number1.to_float() << " * " << number2.to_float() << " = " << result.to_float() << std::endl;
+    EXPECT_EQ(result.get_number(), std::bitset<32>(0b00000000000000000000000000000000));
+}
+
+TEST(IEEE_754_TEST, Denormalized_Multiply_TEST2)
+{
+    // 1.02855755697e-38 0 * 6442450944 = 0
+    IEEE_754 number1(std::bitset<32>(0b00000000011100000000000000000000));
+    IEEE_754 number2(std::bitset<32>(0b01001111110000000000000000000000));
+    IEEE_754 result = number1 * number2;
+    std::cout << number1.to_float() << " * " << number2.to_float() << " = " << result.to_float() << std::endl;
+    EXPECT_EQ(result.get_number(), std::bitset<32>(0b00010000101010000000000000000000));
+}
+
 // special numbers [multiplication]
 
 TEST(IEEE_754_TEST, Infinity_Times_Number)
@@ -278,6 +300,24 @@ TEST(IEEE_754_TEST, TwoBigNumbersMultiplication)
     EXPECT_EQ(result.get_number(), std::bitset<32>(0b01111111100000000000000000000000));
 }
 
+//division tests
+
+TEST(IEEE_754_TEST, Normal_Division_TEST1)
+{
+    // 4 / 2 = 2
+    IEEE_754 four(std::bitset<32>(0b01000000100000000000000000000000));
+    IEEE_754 two(std::bitset<32>(0b01000000000000000000000000000000));
+    IEEE_754 result = four / two;
+    EXPECT_EQ(result.get_number(), std::bitset<32>(0b01000000000000000000000000000000));
+}
+
+TEST(IEEE_754_TEST, Normal_Division_TEST2)
+{
+    // 4 / 4 = 1
+    IEEE_754 four(std::bitset<32>(0b01000000100000000000000000000000));
+    IEEE_754 result = four / four;
+    EXPECT_EQ(result.get_number(), std::bitset<32>(0b00111111100000000000000000000000));
+}
 
 
 
