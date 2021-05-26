@@ -21,7 +21,7 @@ TEST(IEEE_754_TEST, StartAtZero)
 {
     IEEE_754 number;
     float x = number.to_float();
-    std::cout <<"X: "<< x << std::endl;
+    std::cout << "X: " << x << std::endl;
     EXPECT_EQ("0", number.display_in_decimal());
 }
 
@@ -47,7 +47,7 @@ TEST(IEEE_754_TEST, Infinity_Add)
     IEEE_754 infinity(std::bitset<32>(0b01111111100000000000000000000000));
     IEEE_754 result = normalized_number + infinity;
     EXPECT_EQ(result.get_number(), std::bitset<32>(0b01111111100000000000000000000000));
-    // check for problems with references between 
+    // check for problems with references between
     result.flip_sign_bit();
     EXPECT_EQ(result.get_number(), std::bitset<32>(0b11111111100000000000000000000000));
     EXPECT_EQ(infinity.get_number(), std::bitset<32>(0b01111111100000000000000000000000));
@@ -69,12 +69,11 @@ TEST(IEEE_754_TEST, Four_Plus_Two)
     IEEE_754 two(std::bitset<32>(0b01000000000000000000000000000000));
     float x = four.to_float();
     float y = two.to_float();
-    std::cout <<"X: "<< x << std::endl;
-    std::cout <<"Y: "<< y << std::endl;
+    std::cout << "X: " << x << std::endl;
+    std::cout << "Y: " << y << std::endl;
     IEEE_754 result = four + two;
     EXPECT_EQ(result.get_number(), std::bitset<32>(0b01000000110000000000000000000000));
 }
-
 
 TEST(IEEE_754_TEST, NaN_Add)
 {
@@ -107,12 +106,12 @@ TEST(IEEE_754_TEST, TwoDenormalizedNumbersAdd)
 
 //subtraction tests
 TEST(IEEE_754_TEST, Two_Denormalized_Numbers_Subtract)
-{ 
+{
     // denormalized - same_denormalized = 0
     IEEE_754 denormalized_number1(std::bitset<32>(0b00000000001000000000000000000000));
     IEEE_754 denormalized_number2(std::bitset<32>(0b00000000001000000000000000000000));
     IEEE_754 result = denormalized_number1 - denormalized_number2;
-    
+
     EXPECT_EQ(result.get_number(), std::bitset<32>(0b00000000000000000000000000000000));
 }
 
@@ -126,7 +125,7 @@ TEST(IEEE_754_TEST, Infinity_Subtract)
 }
 
 TEST(IEEE_754_TEST, Minus_Infinity_Subtract)
-{ 
+{
     // number - (-Inf) = Inf
     IEEE_754 number1(std::bitset<32>(0b00111111100001100000000000000000));
     IEEE_754 minus_infinity(std::bitset<32>(0b11111111100000000000000000000000));
@@ -205,11 +204,7 @@ TEST(IEEE_754_TEST, Normal_Substract_TEST4)
 //     EXPECT_EQ(result.get_number(), std::bitset<32>(0b00000000011000000000000000000000));
 // }
 
-
-
-
 //multiplication tests
-
 
 TEST(IEEE_754_TEST, Normal_Multiply_TEST1)
 {
@@ -219,6 +214,71 @@ TEST(IEEE_754_TEST, Normal_Multiply_TEST1)
     IEEE_754 result = four * two;
     EXPECT_EQ(result.get_number(), std::bitset<32>(0b01000001000000000000000000000000));
 }
+
+TEST(IEEE_754_TEST, Normal_Multiply_TEST2)
+{
+    // 4 * 4 = 16
+    IEEE_754 four(std::bitset<32>(0b01000000100000000000000000000000));
+    IEEE_754 result = four * four;
+    EXPECT_EQ(result.get_number(), std::bitset<32>(0b01000001100000000000000000000000));
+}
+
+TEST(IEEE_754_TEST, Normal_Multiply_TEST3)
+{
+    // 16 * 16 = 256
+    IEEE_754 sixteen(std::bitset<32>(0b01000001100000000000000000000000));
+    IEEE_754 result = sixteen * sixteen;
+    EXPECT_EQ(result.get_number(), std::bitset<32>(0b01000011100000000000000000000000));
+}
+
+TEST(IEEE_754_TEST, Normal_Multiply_TEST4)
+{
+    // -5 * 4.25 = -21.25
+    IEEE_754 number1(std::bitset<32>(0b11000000101000000000000000000000));
+    IEEE_754 number2(std::bitset<32>(0b01000000100010000000000000000000));
+    IEEE_754 result = number1 * number2;
+    std::cout << number1.to_float() << " * " << number2.to_float() << " = " << result.to_float() << std::endl;
+    EXPECT_EQ(result.get_number(), std::bitset<32>(0b11000001101010100000000000000000));
+}
+
+// special numbers [multiplication]
+
+TEST(IEEE_754_TEST, Infinity_Times_Number)
+{
+    // number* Inf = Inf
+    IEEE_754 normalized_number(std::bitset<32>(0b00111111100001100000000000000000));
+    IEEE_754 infinity(std::bitset<32>(0b01111111100000000000000000000000));
+    IEEE_754 result = normalized_number * infinity;
+    EXPECT_EQ(result.get_number(), std::bitset<32>(0b01111111100000000000000000000000));
+}
+
+TEST(IEEE_754_TEST, Infinity_Times_Infinity)
+{
+    // Inf * Inf = Inf
+    IEEE_754 infinity(std::bitset<32>(0b01111111100000000000000000000000));
+    IEEE_754 result = infinity * infinity;
+    EXPECT_EQ(result.get_number(), std::bitset<32>(0b01111111100000000000000000000000));
+}
+
+
+TEST(IEEE_754_TEST, NaN_Multiplication)
+{
+    // number * NaN = NaN
+    IEEE_754 normalized_number(std::bitset<32>(0b00111111100001100000000000000000));
+    IEEE_754 nan(std::bitset<32>(0b11111111100001100000000000000000));
+    IEEE_754 result = normalized_number * nan;
+    EXPECT_EQ(result.get_number(), std::bitset<32>(0b11111111100001100000000000000000));
+}
+
+TEST(IEEE_754_TEST, TwoBigNumbersMultiplication)
+{
+    // 3.40282346639e+38 * 3.40282346639e+38 = Inf
+    IEEE_754 big_number(std::bitset<32>(0b01111111011111111111111111111111));
+    IEEE_754 result = big_number + big_number;
+    EXPECT_EQ(result.get_number(), std::bitset<32>(0b01111111100000000000000000000000));
+}
+
+
 
 
 int main(int argc, char *argv[])
