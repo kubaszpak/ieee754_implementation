@@ -94,7 +94,7 @@ std::string IEEE_754::display_in_decimal() const
     }
     // std::cout << "value  = " << value << std::endl;
 
-    std::cout << (sign ? "-1" : "1") << " * 2^" << (int)(exponent -  IEEE_754::pow_of_two(IEEE_754::number_of_exponent_bits - 1)-1) << " * " << base + value << std::endl;
+    std::cout << (sign ? "-1" : "1") << " * 2^" << (int)(exponent - IEEE_754::pow_of_two(IEEE_754::number_of_exponent_bits - 1) - 1) << " * " << base + value << std::endl;
     // std::cout << (sign ? "-1" : "1") << " * 2^" << (int)(exponent -   pow(2, IEEE_754::number_of_exponent_bits - 1) - 1) << " * " << base + value << std::endl;
     return "Normalized Number";
 }
@@ -195,10 +195,10 @@ std::bitset<N1> IEEE_754::get_bits(const std::bitset<N2> &b1, const uint8_t star
 
     for (size_t i = 0; i <= (end_index - start_index); i++)
     {
-        result[i] = b1[start_index + 1];
+        result[i] = b1[start_index + i];
     }
 
-    return std::move(result);
+    return result;
 }
 
 // including start and end indexes
@@ -293,7 +293,7 @@ IEEE_754 IEEE_754::operator+(const IEEE_754 &num2)
     bool num1_is_denormalized = (exponent1_ulong == 0) ? true : false;
     bool num2_is_denormalized = (exponent2_ulong == 0) ? true : false;
 
-    int max_exponent = IEEE_754::pow_of_two(IEEE_754::number_of_exponent_bits)-1; 
+    int max_exponent = IEEE_754::pow_of_two(IEEE_754::number_of_exponent_bits) - 1;
     // pow(2, IEEE_754::number_of_exponent_bits) - 1;
 
     // NaN
@@ -489,7 +489,7 @@ IEEE_754 IEEE_754::operator*(const IEEE_754 &num2)
     bool num1_is_denormalized = (exponent1_ulong == 0) ? true : false;
     bool num2_is_denormalized = (exponent2_ulong == 0) ? true : false;
 
-    int max_exponent = IEEE_754::pow_of_two(IEEE_754::number_of_exponent_bits) -1;
+    int max_exponent = IEEE_754::pow_of_two(IEEE_754::number_of_exponent_bits) - 1;
     // pow(2, IEEE_754::number_of_exponent_bits) - 1;
 
     // NaN
@@ -572,7 +572,7 @@ IEEE_754 IEEE_754::operator*(const IEEE_754 &num2)
         _mantissa2[IEEE_754::number_of_mantissa_bits] = 1;
     }
 
-    int load = IEEE_754::pow_of_two(IEEE_754::number_of_exponent_bits-1)-1;
+    int load = IEEE_754::pow_of_two(IEEE_754::number_of_exponent_bits - 1) - 1;
     // int load = pow(2, IEEE_754::number_of_exponent_bits - 1) - 1;
 
     long exponent_result = exponent1_ulong + exponent2_ulong - load;
@@ -582,6 +582,13 @@ IEEE_754 IEEE_754::operator*(const IEEE_754 &num2)
 
     // std::cout << "exp1_ul " << exponent1_ulong << " ,exp2_ul" << exponent2_ulong << std::endl;
     // std::cout << "Max exponent: " << exponent_result << std::endl;
+
+    // std::cout << IEEE_754::get_bits<IEEE_754::number_of_mantissa_bits + 1>(multiply_bitset, IEEE_754::number_of_mantissa_bits + 1, (IEEE_754::number_of_mantissa_bits * 2) + 1) << std::endl;
+    // while (IEEE_754::get_bits<IEEE_754::number_of_mantissa_bits + 1>(multiply_bitset, IEEE_754::number_of_mantissa_bits + 1, (IEEE_754::number_of_mantissa_bits * 2) + 1) != 0)
+    // {
+
+    //     mantissa_multiply_result >>= 1;
+    // }
 
     //problem jest taki ze na zapisanie maksymalnej mnozonej wartosci w ten sposob potrzeba 48 bitow
     long long int mantissa_multiply_result = _mantissa1.to_ulong() * _mantissa2.to_ulong();
@@ -730,7 +737,7 @@ IEEE_754 IEEE_754::operator/(const IEEE_754 &num2)
         _mantissa2[IEEE_754::number_of_mantissa_bits] = 1;
     }
 
-    int load = IEEE_754::pow_of_two(IEEE_754::number_of_exponent_bits-1) -1;
+    int load = IEEE_754::pow_of_two(IEEE_754::number_of_exponent_bits - 1) - 1;
     // int load = pow(2, 7) - 1;
     exponent1_ulong = exponent1_ulong - exponent2_ulong + load;
 
