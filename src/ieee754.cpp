@@ -195,10 +195,10 @@ std::bitset<N1> IEEE_754::get_bits(const std::bitset<N2> &b1, const uint8_t star
 
     for (size_t i = 0; i <= (end_index - start_index); i++)
     {
-        result[i] = b1[start_index + i];
+        result[i] = b1[start_index + 1];
     }
 
-    return result;
+    return std::move(result);
 }
 
 // including start and end indexes
@@ -552,7 +552,7 @@ IEEE_754 IEEE_754::operator*(const IEEE_754 &num2)
     std::bitset<IEEE_754::number_of_mantissa_bits + 1> _mantissa1(mantissa1.to_ulong());
     std::bitset<IEEE_754::number_of_mantissa_bits + 1> _mantissa2(mantissa2.to_ulong());
 
-    // std::cout << "No Test Case caught" << std::endl;
+    std::cout << "No Test Case caught" << std::endl;
 
     if (num1_is_denormalized)
     {
@@ -583,17 +583,10 @@ IEEE_754 IEEE_754::operator*(const IEEE_754 &num2)
     // std::cout << "exp1_ul " << exponent1_ulong << " ,exp2_ul" << exponent2_ulong << std::endl;
     // std::cout << "Max exponent: " << exponent_result << std::endl;
 
-    // std::cout << IEEE_754::get_bits<IEEE_754::number_of_mantissa_bits + 1>(multiply_bitset, IEEE_754::number_of_mantissa_bits + 1, (IEEE_754::number_of_mantissa_bits * 2) + 1) << std::endl;
-    // while (IEEE_754::get_bits<IEEE_754::number_of_mantissa_bits + 1>(multiply_bitset, IEEE_754::number_of_mantissa_bits + 1, (IEEE_754::number_of_mantissa_bits * 2) + 1) != 0)
-    // {
-
-    //     mantissa_multiply_result >>= 1;
-    // }
-
     //problem jest taki ze na zapisanie maksymalnej mnozonej wartosci w ten sposob potrzeba 48 bitow
-    long long int mantissa_multiply_result = _mantissa1.to_ulong() * _mantissa2.to_ulong();
+    long long int mantissa_multiply_result = _mantissa1.to_ullong() * _mantissa2.to_ullong();
 
-    std::cout << mantissa_multiply_result << " = " << _mantissa1.to_ulong() << " * " << _mantissa2.to_ulong() << std::endl;
+    std::cout << _mantissa1.to_ulong() << " * " << _mantissa2.to_ulong() << " = " << mantissa_multiply_result << std::endl;
 
     // TODO: ?> bitset i skalowanie
     // max wartosc mnozenia dwoch mantys to 3.99 => 25 bit

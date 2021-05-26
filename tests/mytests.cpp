@@ -39,8 +39,6 @@ TEST(IEEE_754_TEST, NegativeInfinity)
     EXPECT_EQ("-Inf", negative_infinity.display_in_decimal());
 }
 
-
-
 //addition tests
 TEST(IEEE_754_TEST, Infinity_Add)
 {
@@ -282,7 +280,6 @@ TEST(IEEE_754_TEST, Infinity_Times_Infinity)
     EXPECT_EQ(result.get_number(), std::bitset<32>(0b01111111100000000000000000000000));
 }
 
-
 TEST(IEEE_754_TEST, NaN_Multiplication)
 {
     // number * NaN = NaN
@@ -318,8 +315,6 @@ TEST(IEEE_754_TEST, Normal_Division_TEST2)
     IEEE_754 result = four / four;
     EXPECT_EQ(result.get_number(), std::bitset<32>(0b00111111100000000000000000000000));
 }
-
-
 
 int main(int argc, char *argv[])
 {
