@@ -510,9 +510,9 @@ IEEE_754 IEEE_754::operator*(const IEEE_754 &num2)
         //inf *inf
         if (exponent2_ulong == max_exponent && mantissa2.to_ulong() == 0)
         {
-            //inf * (-inf) = NAN
+            //inf * (-inf) = -inf
             if (sign1 != sign2)
-                return IEEE_754(std::bitset<IEEE_754::number_of_bits>(0b01111111110000000000000000000000));
+                return IEEE_754(std::bitset<IEEE_754::number_of_bits>(0b11111111100000000000000000000000));
             // inf_same_sign * inf_same_sign = +inf
             else
                 return IEEE_754(std::bitset<IEEE_754::number_of_bits>(0b01111111100000000000000000000000));
@@ -754,7 +754,7 @@ IEEE_754 IEEE_754::operator/(const IEEE_754 &num2)
 
     std::bitset<IEEE_754::number_of_mantissa_bits + 2> mantissa_result;
 
-    long border = IEEE_754::pow_of_two(IEEE_754::number_of_mantissa_bits) - 1;
+    // long border = IEEE_754::pow_of_two(IEEE_754::number_of_mantissa_bits) - 1;
 
     // int counter = 0;
     // while (mantissa_division_result < border)
