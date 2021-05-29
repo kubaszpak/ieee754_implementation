@@ -40,178 +40,178 @@ IEEE_754 denormalized_number2(std::bitset<32>(0b00000000001000000000000000000000
 
 std::vector<IEEE_754> numbers;
 
-TEST(IEEE_754_TEST, big_addition_test)
-{
+// TEST(IEEE_754_TEST, big_addition_test)
+// {
 
-    numbers.push_back(zero);
-    numbers.push_back(infinity);
-    numbers.push_back(negative_infinity);
-    // numbers.push_back(nan);
-    numbers.push_back(small_number1);
-    numbers.push_back(small_number2);
-    numbers.push_back(big_number1);
-    numbers.push_back(big_number2);
-    numbers.push_back(four);
-    numbers.push_back(two);
-    numbers.push_back(ten);
-    numbers.push_back(eighty);
-    numbers.push_back(denormalized_number1);
-    numbers.push_back(denormalized_number2);
+//     numbers.push_back(zero);
+//     numbers.push_back(infinity);
+//     numbers.push_back(negative_infinity);
+//     // numbers.push_back(nan);
+//     numbers.push_back(small_number1);
+//     numbers.push_back(small_number2);
+//     numbers.push_back(big_number1);
+//     numbers.push_back(big_number2);
+//     numbers.push_back(four);
+//     numbers.push_back(two);
+//     numbers.push_back(ten);
+//     numbers.push_back(eighty);
+//     numbers.push_back(denormalized_number1);
+//     numbers.push_back(denormalized_number2);
 
-    int temp = 0;
+//     int temp = 0;
 
-    for (int i = numbers.size() - 1; i >= 0; i--)
-    {
-        temp++;
-        for (size_t j = 0; j < numbers.size(); j++)
-        {
-            std::cout << "----------\n"
-                      << "addition test " << temp << "." << (j + 1) << std::endl;
-            float f_result = numbers[i].to_float() + numbers[j].to_float();
-            std::cout << f_result << " = " << numbers[i].to_float() << " + " << numbers[j].to_float() << std::endl;
-            IEEE_754 result = numbers[i] + numbers[j];
-            std::cout << result.get_number() << " = " << numbers[i].get_number() << " + " << numbers[j].get_number() << std::endl;
+//     for (int i = numbers.size() - 1; i >= 0; i--)
+//     {
+//         temp++;
+//         for (size_t j = 0; j < numbers.size(); j++)
+//         {
+//             std::cout << "----------\n"
+//                       << "addition test " << temp << "." << (j + 1) << std::endl;
+//             float f_result = numbers[i].to_float() + numbers[j].to_float();
+//             std::cout << f_result << " = " << numbers[i].to_float() << " + " << numbers[j].to_float() << std::endl;
+//             IEEE_754 result = numbers[i] + numbers[j];
+//             std::cout << result.get_number() << " = " << numbers[i].get_number() << " + " << numbers[j].get_number() << std::endl;
 
-            if (isnan(f_result))
-                continue;
+//             if (isnan(f_result))
+//                 continue;
 
-            EXPECT_EQ(f_result, result.to_float());
-            std::cout << "----------\n"
-                      << std::endl;
-        }
-        numbers.pop_back();
-    }
-}
+//             EXPECT_EQ(f_result, result.to_float());
+//             std::cout << "----------\n"
+//                       << std::endl;
+//         }
+//         numbers.pop_back();
+//     }
+// }
 
-TEST(IEEE_754_TEST, big_subtraction_test)
-{
+// TEST(IEEE_754_TEST, big_subtraction_test)
+// {
 
-    numbers.push_back(zero);
-    numbers.push_back(infinity);
-    numbers.push_back(negative_infinity);
-    // numbers.push_back(nan);
-    numbers.push_back(small_number1);
-    numbers.push_back(small_number2);
-    numbers.push_back(big_number1);
-    numbers.push_back(big_number2);
-    numbers.push_back(four);
-    numbers.push_back(two);
-    numbers.push_back(ten);
-    numbers.push_back(eighty);
-    numbers.push_back(denormalized_number1);
-    numbers.push_back(denormalized_number2);
+//     numbers.push_back(zero);
+//     numbers.push_back(infinity);
+//     numbers.push_back(negative_infinity);
+//     // numbers.push_back(nan);
+//     numbers.push_back(small_number1);
+//     numbers.push_back(small_number2);
+//     numbers.push_back(big_number1);
+//     numbers.push_back(big_number2);
+//     numbers.push_back(four);
+//     numbers.push_back(two);
+//     numbers.push_back(ten);
+//     numbers.push_back(eighty);
+//     numbers.push_back(denormalized_number1);
+//     numbers.push_back(denormalized_number2);
 
-    int temp = 0;
+//     int temp = 0;
 
-    for (int i = numbers.size() - 1; i >= 0; i--)
-    {
-        temp++;
-        for (size_t j = 0; j < numbers.size(); j++)
-        {
-            std::cout << "----------\n"
-                      << "subtraction test " << temp << "." << (j + 1) << std::endl;
-            float f_result = numbers[i].to_float() - numbers[j].to_float();
-            std::cout << f_result << " = " << numbers[i].to_float() << " - " << numbers[j].to_float() << std::endl;
-            IEEE_754 result = numbers[i] - numbers[j];
-            std::cout << result.get_number() << " = " << numbers[i].get_number() << " - " << numbers[j].get_number() << std::endl;
+//     for (int i = numbers.size() - 1; i >= 0; i--)
+//     {
+//         temp++;
+//         for (size_t j = 0; j < numbers.size(); j++)
+//         {
+//             std::cout << "----------\n"
+//                       << "subtraction test " << temp << "." << (j + 1) << std::endl;
+//             float f_result = numbers[i].to_float() - numbers[j].to_float();
+//             std::cout << f_result << " = " << numbers[i].to_float() << " - " << numbers[j].to_float() << std::endl;
+//             IEEE_754 result = numbers[i] - numbers[j];
+//             std::cout << result.get_number() << " = " << numbers[i].get_number() << " - " << numbers[j].get_number() << std::endl;
 
-            if (isnan(f_result))
-                continue;
+//             if (isnan(f_result))
+//                 continue;
 
-            EXPECT_EQ(f_result, result.to_float());
-            std::cout << "----------\n"
-                      << std::endl;
-        }
-        numbers.pop_back();
-    }
-}
+//             EXPECT_EQ(f_result, result.to_float());
+//             std::cout << "----------\n"
+//                       << std::endl;
+//         }
+//         numbers.pop_back();
+//     }
+// }
 
-TEST(IEEE_754_TEST, big_multiplication_test)
-{
+// TEST(IEEE_754_TEST, big_multiplication_test)
+// {
 
-    numbers.push_back(zero);
-    numbers.push_back(infinity);
-    numbers.push_back(negative_infinity);
-    // numbers.push_back(nan);
-    numbers.push_back(small_number1);
-    numbers.push_back(small_number2);
-    numbers.push_back(big_number1);
-    numbers.push_back(big_number2);
-    numbers.push_back(four);
-    numbers.push_back(two);
-    numbers.push_back(ten);
-    numbers.push_back(eighty);
-    numbers.push_back(denormalized_number1);
-    numbers.push_back(denormalized_number2);
+//     numbers.push_back(zero);
+//     numbers.push_back(infinity);
+//     numbers.push_back(negative_infinity);
+//     // numbers.push_back(nan);
+//     numbers.push_back(small_number1);
+//     numbers.push_back(small_number2);
+//     numbers.push_back(big_number1);
+//     numbers.push_back(big_number2);
+//     numbers.push_back(four);
+//     numbers.push_back(two);
+//     numbers.push_back(ten);
+//     numbers.push_back(eighty);
+//     numbers.push_back(denormalized_number1);
+//     numbers.push_back(denormalized_number2);
 
-    int temp = 0;
+//     int temp = 0;
 
-    for (int i = numbers.size() - 1; i >= 0; i--)
-    {
-        temp++;
-        for (size_t j = 0; j < numbers.size(); j++)
-        {
-            std::cout << "----------\n"
-                      << "multiplication test " << temp << "." << (j + 1) << std::endl;
-            float f_result = numbers[i].to_float() * numbers[j].to_float();
-            std::cout << f_result << " = " << numbers[i].to_float() << " * " << numbers[j].to_float() << std::endl;
-            IEEE_754 result = numbers[i] * numbers[j];
-            std::cout << result.get_number() << " = " << numbers[i].get_number() << " * " << numbers[j].get_number() << std::endl;
+//     for (int i = numbers.size() - 1; i >= 0; i--)
+//     {
+//         temp++;
+//         for (size_t j = 0; j < numbers.size(); j++)
+//         {
+//             std::cout << "----------\n"
+//                       << "multiplication test " << temp << "." << (j + 1) << std::endl;
+//             float f_result = numbers[i].to_float() * numbers[j].to_float();
+//             std::cout << f_result << " = " << numbers[i].to_float() << " * " << numbers[j].to_float() << std::endl;
+//             IEEE_754 result = numbers[i] * numbers[j];
+//             std::cout << result.get_number() << " = " << numbers[i].get_number() << " * " << numbers[j].get_number() << std::endl;
 
-            if (isnan(f_result))
-                continue;
+//             if (isnan(f_result))
+//                 continue;
 
-            EXPECT_EQ(f_result, result.to_float());
-            std::cout << "----------\n"
-                      << std::endl;
-        }
-        numbers.pop_back();
-    }
-}
+//             EXPECT_EQ(f_result, result.to_float());
+//             std::cout << "----------\n"
+//                       << std::endl;
+//         }
+//         numbers.pop_back();
+//     }
+// }
 
-TEST(IEEE_754_TEST, big_division_test)
-{
+// TEST(IEEE_754_TEST, big_division_test)
+// {
 
-    // numbers.push_back(zero);
-    numbers.push_back(infinity);
-    numbers.push_back(negative_infinity);
-    // numbers.push_back(nan);
-    numbers.push_back(small_number1);
-    numbers.push_back(small_number2);
-    numbers.push_back(big_number1);
-    numbers.push_back(big_number2);
-    numbers.push_back(four);
-    numbers.push_back(two);
-    numbers.push_back(ten);
-    numbers.push_back(eighty);
-    numbers.push_back(denormalized_number1);
-    numbers.push_back(denormalized_number2);
+//     // numbers.push_back(zero);
+//     numbers.push_back(infinity);
+//     numbers.push_back(negative_infinity);
+//     // numbers.push_back(nan);
+//     numbers.push_back(small_number1);
+//     numbers.push_back(small_number2);
+//     numbers.push_back(big_number1);
+//     numbers.push_back(big_number2);
+//     numbers.push_back(four);
+//     numbers.push_back(two);
+//     numbers.push_back(ten);
+//     numbers.push_back(eighty);
+//     numbers.push_back(denormalized_number1);
+//     numbers.push_back(denormalized_number2);
 
-    int temp = 0;
+//     int temp = 0;
 
-    for (int i = numbers.size() - 1; i >= 0; i--)
-    {
-        std::cout << "##" << i << std::endl;
-        temp++;
-        for (size_t j = 0; j < numbers.size(); j++)
-        {
-            std::cout << "----------\n"
-                      << "division test " << temp << "." << (j + 1) << std::endl;
-            float f_result = numbers[i].to_float() / numbers[j].to_float();
-            std::cout << f_result << " = " << numbers[i].to_float() << " / " << numbers[j].to_float() << std::endl;
-            IEEE_754 result = numbers[i] / numbers[j];
-            std::cout << result.get_number() << " = " << numbers[i].get_number() << " / " << numbers[j].get_number() << std::endl;
+//     for (int i = numbers.size() - 1; i >= 0; i--)
+//     {
+//         std::cout << "##" << i << std::endl;
+//         temp++;
+//         for (size_t j = 0; j < numbers.size(); j++)
+//         {
+//             std::cout << "----------\n"
+//                       << "division test " << temp << "." << (j + 1) << std::endl;
+//             float f_result = numbers[i].to_float() / numbers[j].to_float();
+//             std::cout << f_result << " = " << numbers[i].to_float() << " / " << numbers[j].to_float() << std::endl;
+//             IEEE_754 result = numbers[i] / numbers[j];
+//             std::cout << result.get_number() << " = " << numbers[i].get_number() << " / " << numbers[j].get_number() << std::endl;
 
-            if (isnan(f_result))
-                continue;
+//             if (isnan(f_result))
+//                 continue;
 
-            EXPECT_EQ(f_result, result.to_float());
-            std::cout << "----------\n"
-                      << std::endl;
-        }
-        numbers.pop_back();
-    }
-}
+//             EXPECT_EQ(f_result, result.to_float());
+//             std::cout << "----------\n"
+//                       << std::endl;
+//         }
+//         numbers.pop_back();
+//     }
+// }
 
 TEST(IEEE_754_TEST, StartAtZero)
 {
@@ -491,6 +491,22 @@ TEST(IEEE_754_TEST, TwoBigNumbersMultiplication)
     IEEE_754 big_number(std::bitset<32>(0b01111111011111111111111111111111));
     IEEE_754 result = big_number + big_number;
     EXPECT_EQ(result.get_number(), std::bitset<32>(0b01111111100000000000000000000000));
+}
+
+TEST(IEEE_754_TEST, Unsolved_1_6)
+{
+    // multiplication test 1.6
+    // 1 = 2.93874e-39 * 3.40282e+38
+    // 2097152 * 16777215 = 35184369991680
+    // 01000000011111111111111111111111 = 00000000001000000000000000000000 * 01111111011111111111111111111111
+
+    IEEE_754 num1(std::bitset<32>(0b00000000001000000000000000000000)); // 1 = 2.93874e-39
+    IEEE_754 num2(std::bitset<32>(0b01111111011111111111111111111111)); //3.40282e+38
+    IEEE_754 result = num1 * num2;
+    float f_result = num1.to_float() * num2.to_float();
+    std::cout << f_result << " = " << num1.to_float() << " * " << num2.to_float() << std::endl;
+    std::cout << result.get_number() << " = " << num1.get_number() << " * " << num2.get_number() << std::endl;
+    EXPECT_EQ(f_result, result.to_float());
 }
 
 //division tests

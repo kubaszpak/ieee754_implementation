@@ -592,11 +592,19 @@ IEEE_754 IEEE_754::operator*(const IEEE_754 &num2)
     // TODO: ?> bitset i skalowanie
     // max wartosc mnozenia dwoch mantys to 3.99 => 25 bit
 
-    long border = IEEE_754::pow_of_two(IEEE_754::number_of_mantissa_bits + 1) - 1;
-    while (mantissa_multiply_result > border)
+    // long border = IEEE_754::pow_of_two(IEEE_754::number_of_mantissa_bits + 1) - 1;
+
+    for (size_t i = 0; i < IEEE_754::number_of_mantissa_bits; i++)
     {
         mantissa_multiply_result /= 2;
     }
+    
+    // while (mantissa_multiply_result > border)
+    // {
+    //     counter++;
+    //     mantissa_multiply_result /= 2;
+    // }
+
 
     std::bitset<IEEE_754::number_of_mantissa_bits + 2> mantissa_result;
 
@@ -748,14 +756,19 @@ IEEE_754 IEEE_754::operator/(const IEEE_754 &num2)
 
     long border = IEEE_754::pow_of_two(IEEE_754::number_of_mantissa_bits) - 1;
 
-    int counter = 0;
-    while (mantissa_division_result < border)
-    {
-        if (mantissa_division_result == 0)
-            break;
+    // int counter = 0;
+    // while (mantissa_division_result < border)
+    // {
+    //     if (mantissa_division_result == 0)
+    //         break;
 
-        counter++;
-        // std::cout << counter << std::endl;
+    //     counter++;
+    //     // std::cout << counter << std::endl;
+    //     mantissa_division_result *= 2;
+    // }
+
+    for (size_t i = 0; i < IEEE_754::number_of_mantissa_bits; i++)
+    {
         mantissa_division_result *= 2;
     }
 
