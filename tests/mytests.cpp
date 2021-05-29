@@ -310,8 +310,19 @@ TEST(IEEE_754_TEST, Normal_Division_TEST1)
 
 TEST(IEEE_754_TEST, Normal_Division_TEST2)
 {
+    // 10/ 80 = 0.125
+    IEEE_754 ten(std::bitset<32>(0b01000001001000000000000000000000));
+    IEEE_754 eighty(std::bitset<32>(0b01000010101000000000000000000000));
+
+    IEEE_754 result = ten / eighty;
+    EXPECT_EQ(result.get_number(), std::bitset<32>(0b00111110000000000000000000000000));
+}
+
+TEST(IEEE_754_TEST, Normal_Division_TEST3)
+{
     // 4 / 4 = 1
     IEEE_754 four(std::bitset<32>(0b01000000100000000000000000000000));
+    
     IEEE_754 result = four / four;
     EXPECT_EQ(result.get_number(), std::bitset<32>(0b00111111100000000000000000000000));
 }
