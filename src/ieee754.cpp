@@ -735,29 +735,32 @@ IEEE_754 IEEE_754::operator/(const IEEE_754 &num2)
     // int load = pow(2, 7) - 1;
     long exponent_result = exponent1_ulong - exponent2_ulong + load;
 
-    std::cout << "expo_result_ulong = " << exponent_result << std::endl;
-    std::cout << "expo1 = " << exponent1_ulong << std::endl;
-    std::cout << "expo2 = " << exponent2_ulong << std::endl;
-    std::cout << "load =" << load << std::endl;
+    // std::cout << "expo_result_ulong = " << exponent_result << std::endl;
+    // std::cout << "expo1 = " << exponent1_ulong << std::endl;
+    // std::cout << "expo2 = " << exponent2_ulong << std::endl;
+    // std::cout << "load =" << load << std::endl;
 
-    long int mantissa_multiply_result = _mantissa1.to_ulong() / _mantissa2.to_ulong();
+    long int mantissa_division_result = _mantissa1.to_ulong() / _mantissa2.to_ulong();
 
-    std::cout << mantissa_multiply_result << " = " << _mantissa1.to_ulong() << " / " << _mantissa2.to_ulong() << std::endl;
+    // std::cout << mantissa_division_result << " = " << _mantissa1.to_ulong() << " / " << _mantissa2.to_ulong() << std::endl;
 
     std::bitset<IEEE_754::number_of_mantissa_bits + 2> mantissa_result;
 
     long border = IEEE_754::pow_of_two(IEEE_754::number_of_mantissa_bits) - 1;
 
     int counter = 0;
-    while (mantissa_multiply_result < border)
+    while (mantissa_division_result < border)
     {
+        if (mantissa_division_result == 0)
+            break;
+
         counter++;
-        std::cout << counter << std::endl;
-        mantissa_multiply_result *= 2;
+        // std::cout << counter << std::endl;
+        mantissa_division_result *= 2;
     }
 
-    mantissa_result = (unsigned long)mantissa_multiply_result;
-    std::cout << "mantissa_result = " << mantissa_result << std::endl;
+    mantissa_result = (unsigned long)mantissa_division_result;
+    // std::cout << "mantissa_result = " << mantissa_result << std::endl;
 
     // TODO Round the result
     if (mantissa_result[number_of_mantissa_bits + 1] == 1)
@@ -766,7 +769,7 @@ IEEE_754 IEEE_754::operator/(const IEEE_754 &num2)
         scale_mantissa_down(1, mantissa_result);
     }
 
-    std::cout << "po skalowaniu:  \nexpo =" << exponent_result << "\n mantissa = " << mantissa_result << std::endl;
+    // std::cout << "po skalowaniu:  \nexpo =" << exponent_result << "\n mantissa = " << mantissa_result << std::endl;
 
     while (mantissa_result[IEEE_754::number_of_mantissa_bits] == 0 && exponent_result > 0)
     {
