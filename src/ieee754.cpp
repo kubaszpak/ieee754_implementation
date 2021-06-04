@@ -391,11 +391,11 @@ IEEE_754 IEEE_754::operator+(const IEEE_754 &num2)
     int mantissa1_signed = (sign1 == 0) ? static_cast<int>(_mantissa1.to_ulong()) : static_cast<int>(_mantissa1.to_ulong() * (-1));
     int mantissa2_signed = (sign2 == 0) ? static_cast<int>(_mantissa2.to_ulong()) : static_cast<int>(_mantissa2.to_ulong() * (-1));
 
-    // std::cout << mantissa1_signed << " + " << mantissa2_signed;
+    std::cout << mantissa1_signed << " + " << mantissa2_signed;
 
     int mantissa_add_result = mantissa1_signed + mantissa2_signed;
 
-    // std::cout << " = " << mantissa_add_result << std::endl;
+    std::cout << " = " << mantissa_add_result << std::endl;
 
     // 25 bit bitset
     std::bitset<IEEE_754::number_of_mantissa_bits + 2> mantissa_result;
@@ -413,8 +413,8 @@ IEEE_754 IEEE_754::operator+(const IEEE_754 &num2)
         result_is_negative = true;
     }
 
-    // std::cout << "Mantissa result: " << mantissa_result << std::endl;
-    // std::cout << "Max Exponent Unsigned Long: " << exponent_result << std::endl;
+    std::cout << "Mantissa result: " << mantissa_result << std::endl;
+    std::cout << "Max Exponent Unsigned Long: " << exponent_result << std::endl;
 
     // TODO Round the result
     if (mantissa_result[number_of_mantissa_bits + 1] == 1)
@@ -432,19 +432,10 @@ IEEE_754 IEEE_754::operator+(const IEEE_754 &num2)
         // std::cout << "exponent_result - 127 " << static_cast<int>(exponent_result) - 127 << std::endl;
         // std::cout << "Mantissa result " << mantissa_result << std::endl;
         // ? separate function scale_mantissa_up ?
-        mantissa_result <<= 1;
         exponent_result -= 1;
 
-        //jesli w mantysie sa same zera, chcemy wykonac powyzsze instrukcje tylko raz
-        // if (mantissa_add_result == 0)
-        // {
-        //     break;
-        // }
-    }
-
-    if (mantissa_result[IEEE_754::number_of_mantissa_bits] == 1 && exponent_result == 0)
-    {
-        mantissa_result >>= 1;
+        if (exponent_result != 0)
+            mantissa_result <<= 1;
     }
 
     // duza wartosc
@@ -585,26 +576,14 @@ IEEE_754 IEEE_754::operator*(const IEEE_754 &num2)
     // std::cout << "Max exponent: " << exponent_result << std::endl;
 
     //problem jest taki ze na zapisanie maksymalnej mnozonej wartosci w ten sposob potrzeba 48 bitow w przypadku wykoszystania bitsetu
-    long long int mantissa_multiply_result = _mantissa1.to_ullong() * _mantissa2.to_ullong();
+    unsigned long long mantissa_multiply_result = _mantissa1.to_ullong() * _mantissa2.to_ullong();
 
     std::cout << _mantissa1.to_ulong() << " * " << _mantissa2.to_ulong() << " = " << mantissa_multiply_result << std::endl;
 
     // TODO: ?> bitset i skalowanie
     // max wartosc mnozenia dwoch mantys to 3.99 => 25 bit
 
-    // long border = IEEE_754::pow_of_two(IEEE_754::number_of_mantissa_bits + 1) - 1;
-
-    for (size_t i = 0; i < IEEE_754::number_of_mantissa_bits; i++)
-    {
-        mantissa_multiply_result /= 2;
-    }
-    
-    // while (mantissa_multiply_result > border)
-    // {
-    //     counter++;
-    //     mantissa_multiply_result /= 2;
-    // }
-
+    mantissa_multiply_result /= pow_of_two(IEEE_754::number_of_mantissa_bits);
 
     std::bitset<IEEE_754::number_of_mantissa_bits + 2> mantissa_result;
 
@@ -623,14 +602,15 @@ IEEE_754 IEEE_754::operator*(const IEEE_754 &num2)
         // std::cout << "exponent_result - 127 " << static_cast<int>(exponent_result) - 127 << std::endl;
         // std::cout << "Mantissa result " << mantissa_result << std::endl;
         // ? separate function scale_mantissa_up ?
-        mantissa_result <<= 1;
         exponent_result -= 1;
+        if(exponent_result != 0) mantissa_result <<= 1;
     }
 
-    if (mantissa_result[IEEE_754::number_of_mantissa_bits] == 1 && exponent_result == 0)
-    {
-        mantissa_result >>= 1;
-    }
+    // // jeśli po przesunięciu mantysy 
+    // if (mantissa_result[IEEE_754::number_of_mantissa_bits] == 1 && exponent_result == 0)
+    // {
+    //     mantissa_result >>= 1;
+    // }
 
     // duza wartosc
     if (exponent_result >= max_exponent)
@@ -748,29 +728,14 @@ IEEE_754 IEEE_754::operator/(const IEEE_754 &num2)
     // std::cout << "expo2 = " << exponent2_ulong << std::endl;
     // std::cout << "load =" << load << std::endl;
 
-    long int mantissa_division_result = _mantissa1.to_ulong() / _mantissa2.to_ulong();
+    unsigned long long mantissa_division_result = _mantissa1.to_ulong() * IEEE_754::pow_of_two(IEEE_754::number_of_mantissa_bits)/ _mantissa2.to_ulong();
 
-    // std::cout << mantissa_division_result << " = " << _mantissa1.to_ulong() << " / " << _mantissa2.to_ulong() << std::endl;
+    std::cout << mantissa_division_result << " = " << _mantissa1.to_ulong() << " / " << _mantissa2.to_ulong() << std::endl;
 
     std::bitset<IEEE_754::number_of_mantissa_bits + 2> mantissa_result;
 
-    // long border = IEEE_754::pow_of_two(IEEE_754::number_of_mantissa_bits) - 1;
 
-    // int counter = 0;
-    // while (mantissa_division_result < border)
-    // {
-    //     if (mantissa_division_result == 0)
-    //         break;
-
-    //     counter++;
-    //     // std::cout << counter << std::endl;
-    //     mantissa_division_result *= 2;
-    // }
-
-    for (size_t i = 0; i < IEEE_754::number_of_mantissa_bits; i++)
-    {
-        mantissa_division_result *= 2;
-    }
+    // std::cout << mantissa_division_result << std::endl;
 
     mantissa_result = (unsigned long)mantissa_division_result;
     // std::cout << "mantissa_result = " << mantissa_result << std::endl;
@@ -790,8 +755,9 @@ IEEE_754 IEEE_754::operator/(const IEEE_754 &num2)
         // std::cout << "exponent_result - 127 " << static_cast<int>(exponent1_ulong) - 127 << std::endl;
         // std::cout << "Mantissa result " << mantissa_result << std::endl;
         // ? separate function scale_mantissa_up ?
-        mantissa_result <<= 1;
+        
         exponent_result -= 1;
+        if(exponent_result != 0) mantissa_result <<= 1;
     }
 
     if (mantissa_result[IEEE_754::number_of_mantissa_bits] == 1 && exponent_result == 0)

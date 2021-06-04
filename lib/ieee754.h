@@ -6,6 +6,8 @@
 #include <cassert>
 #include <cmath>
 #include <string>
+#include <cfenv>
+#pragma STDC FENV_ACCESS on
 
 template <size_t N1>
 struct AddResult

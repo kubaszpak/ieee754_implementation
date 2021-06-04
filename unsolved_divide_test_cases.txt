@@ -1,429 +1,92 @@
-
 ----------
-division test 1.3
-0.285714 = 2.93874e-39 / 1.02856e-38
-00000000000000000000000000000000 = 00000000001000000000000000000000 / 00000000011100000000000000000000
-
+division test 2.10
+7.34687e-41 = 5.87747e-39 / 80
+3355443 = 4194304 / 10485760
+01111101101100110011001100110011 = 00000000010000000000000000000000 / 01000010101000000000000000000000
+/home/piotr/Projects/Cpp/ieee754 cpp/ieee754_implementation/tests/mytests.cpp:252: Failure
 Expected equality of these values:
   f_result
-    Which is: 0.285714
+    Which is: 7.34687e-41
   result.to_float()
-    Which is: 0
-----------
-
-----------
-division test 1.4
-1.01725e-05 = 2.93874e-39 / 2.88889e-34
-00000000000000000000000000000000 = 00000000001000000000000000000000 / 00000111110000000000000000000000
-
-Expected equality of these values:
-  f_result
-    Which is: 1.01725e-05
-  result.to_float()
-    Which is: 0
-----------
-
-----------
-division test 1.5
-0 = 2.93874e-39 / 3.40282e+38
-01000001000000000000000000000000 = 00000000001000000000000000000000 / 01111111011111111111111111111111
-
-Expected equality of these values:
-  f_result
-    Which is: 0
-  result.to_float()
-    Which is: 8
-----------
-
-----------
-division test 1.6
-0 = 2.93874e-39 / 3.40282e+38
-01000001000000000000000000000000 = 00000000001000000000000000000000 / 01111111011111111111111111111111
-
-Expected equality of these values:
-  f_result
-    Which is: 0
-  result.to_float()
-    Which is: 8
-----------
-
-----------
-division test 1.7
-7.34684e-40 = 2.93874e-39 / 4
-01111111100000000000000000000000 = 00000000001000000000000000000000 / 01000000100000000000000000000000
-
-Expected equality of these values:
-  f_result
-    Which is: 7.34684e-40
-  result.to_float()
-    Which is: inf
-----------
-
-----------
-division test 1.8
-1.46937e-39 = 2.93874e-39 / 2
-00000000000000000000000000000000 = 00000000001000000000000000000000 / 01000000000000000000000000000000
-
-Expected equality of these values:
-  f_result
-    Which is: 1.46937e-39
-  result.to_float()
-    Which is: 0
-----------
-
-----------
-division test 1.9
-2.93873e-40 = 2.93874e-39 / 10
-01111111000000000000000000000000 = 00000000001000000000000000000000 / 01000001001000000000000000000000
-
-Expected equality of these values:
-  f_result
-    Which is: 2.93873e-40
-  result.to_float()
-    Which is: 1.70141e+38
-----------
-
-----------
-division test 1.10
-3.67336e-41 = 2.93874e-39 / 80
-01111101100000000000000000000000 = 00000000001000000000000000000000 / 01000010101000000000000000000000
-
-Expected equality of these values:
-  f_result
-    Which is: 3.67336e-41
-  result.to_float()
-    Which is: 2.12676e+37
-----------
-
-----------
-division test 1.11
-0.5 = 2.93874e-39 / 5.87747e-39
-00000000000000000000000000000000 = 00000000001000000000000000000000 / 00000000010000000000000000000000
-
-Expected equality of these values:
-  f_result
-    Which is: 0.5
-  result.to_float()
-    Which is: 0
-----------
-
-
-
-----------
-division test 2.3
-0.571429 = 5.87747e-39 / 1.02856e-38
-00000000000000000000000000000000 = 00000000010000000000000000000000 / 00000000011100000000000000000000
-
-Expected equality of these values:
-  f_result
-    Which is: 0.571429
-  result.to_float()
-    Which is: 0
-----------
-
-----------
-division test 2.4
-2.03451e-05 = 5.87747e-39 / 2.88889e-34
-00000000000000000000000000000000 = 00000000010000000000000000000000 / 00000111110000000000000000000000
-
-Expected equality of these values:
-  f_result
-    Which is: 2.03451e-05
-  result.to_float()
-    Which is: 0
-----------
-
-----------
-division test 2.5
-0 = 5.87747e-39 / 3.40282e+38
-01000001000000000000000000000000 = 00000000010000000000000000000000 / 01111111011111111111111111111111
-
-Expected equality of these values:
-  f_result
-    Which is: 0
-  result.to_float()
-    Which is: 8
-----------
-
-----------
-division test 2.6
-0 = 5.87747e-39 / 3.40282e+38
-01000001000000000000000000000000 = 00000000010000000000000000000000 / 01111111011111111111111111111111
-
-Expected equality of these values:
-  f_result
-    Which is: 0
-  result.to_float()
-    Which is: 8
-----------
-
-----------
-division test 2.7
-1.46937e-39 = 5.87747e-39 / 4
-01111111100000000000000000000000 = 00000000010000000000000000000000 / 01000000100000000000000000000000
-
-Expected equality of these values:
-  f_result
-    Which is: 1.46937e-39
-  result.to_float()
-    Which is: inf
-----------
-
-----------
-division test 2.8
-2.93874e-39 = 5.87747e-39 / 2
-00000000000000000000000000000000 = 00000000010000000000000000000000 / 01000000000000000000000000000000
-
-Expected equality of these values:
-  f_result
-    Which is: 2.93874e-39
-  result.to_float()
-    Which is: 0
+    Which is: 2.97747e+37
 ----------
 
 ----------
 division test 2.9
 5.87747e-40 = 5.87747e-39 / 10
-01111111000000000000000000000000 = 00000000010000000000000000000000 / 01000001001000000000000000000000
-
+3355443 = 4194304 / 10485760
+01111111001100110011001100110011 = 00000000010000000000000000000000 / 01000001001000000000000000000000
+/home/piotr/Projects/Cpp/ieee754 cpp/ieee754_implementation/tests/mytests.cpp:252: Failure
 Expected equality of these values:
   f_result
     Which is: 5.87747e-40
   result.to_float()
-    Which is: 1.70141e+38
+    Which is: 2.38198e+38
 ----------
 
 ----------
-division test 2.10
-7.34687e-41 = 5.87747e-39 / 80
-01111101100000000000000000000000 = 00000000010000000000000000000000 / 01000010101000000000000000000000
-
+division test 2.7
+1.46937e-39 = 5.87747e-39 / 4
+4194304 = 4194304 / 8388608
+01111111110000000000000000000000 = 00000000010000000000000000000000 / 01000000100000000000000000000000
+/home/piotr/Projects/Cpp/ieee754 cpp/ieee754_implementation/tests/mytests.cpp:252: Failure
 Expected equality of these values:
   f_result
-    Which is: 7.34687e-41
+    Which is: 1.46937e-39
   result.to_float()
-    Which is: 2.12676e+37
+    Which is: nan
 ----------
 
 
-
 ----------
-division test 3.4
-2.76922e+35 = 80 / 2.88889e-34
-00000000000000000000000000000000 = 01000010101000000000000000000000 / 00000111110000000000000000000000
-
+division test 2.8
+2.93874e-39 = 5.87747e-39 / 2
+4194304 = 4194304 / 8388608
+00000000010000000000000000000000 = 00000000010000000000000000000000 / 01000000000000000000000000000000
+/home/piotr/Projects/Cpp/ieee754 cpp/ieee754_implementation/tests/mytests.cpp:252: Failure
 Expected equality of these values:
   f_result
-    Which is: 2.76922e+35
+    Which is: 2.93874e-39
   result.to_float()
-    Which is: 0
-----------
-
-----------
-division test 3.5
-2.35099e-37 = 80 / 3.40282e+38
-00000000000000000000000000000000 = 01000010101000000000000000000000 / 01111111011111111111111111111111
-
-Expected equality of these values:
-  f_result
-    Which is: 2.35099e-37
-  result.to_float()
-    Which is: 0
-----------
-
-----------
-division test 3.6
-2.35099e-37 = 80 / 3.40282e+38
-00000000000000000000000000000000 = 01000010101000000000000000000000 / 01111111011111111111111111111111
-
-Expected equality of these values:
-  f_result
-    Which is: 2.35099e-37
-  result.to_float()
-    Which is: 0
-----------
-
-----------
-division test 3.7
-20 = 80 / 4
-01000001100000000000000000000000 = 01000010101000000000000000000000 / 01000000100000000000000000000000
-
-Expected equality of these values:
-  f_result
-    Which is: 20
-  result.to_float()
-    Which is: 16
-----------
-
-----------
-division test 3.8
-40 = 80 / 2
-01000010000000000000000000000000 = 01000010101000000000000000000000 / 01000000000000000000000000000000
-
-Expected equality of these values:
-  f_result
-    Which is: 40
-  result.to_float()
-    Which is: 32
-----------
-
-
-----------
-division test 4.4
-3.46153e+34 = 10 / 2.88889e-34
-00000000000000000000000000000000 = 01000001001000000000000000000000 / 00000111110000000000000000000000
-
-Expected equality of these values:
-  f_result
-    Which is: 3.46153e+34
-  result.to_float()
-    Which is: 0
-----------
-
-----------
-division test 4.5
-2.93874e-38 = 10 / 3.40282e+38
-00000000000000000000000000000000 = 01000001001000000000000000000000 / 01111111011111111111111111111111
-
-Expected equality of these values:
-  f_result
-    Which is: 2.93874e-38
-  result.to_float()
-    Which is: 0
-----------
-
-----------
-division test 4.6
-2.93874e-38 = 10 / 3.40282e+38
-00000000000000000000000000000000 = 01000001001000000000000000000000 / 01111111011111111111111111111111
-
-Expected equality of these values:
-  f_result
-    Which is: 2.93874e-38
-  result.to_float()
-    Which is: 0
-----------
-
-----------
-division test 4.7
-2.5 = 10 / 4
-01000000000000000000000000000000 = 01000001001000000000000000000000 / 01000000100000000000000000000000
-
-Expected equality of these values:
-  f_result
-    Which is: 2.5
-  result.to_float()
-    Which is: 2
-----------
-
-----------
-division test 4.8
-5 = 10 / 2
-01000000100000000000000000000000 = 01000001001000000000000000000000 / 01000000000000000000000000000000
-
-Expected equality of these values:
-  f_result
-    Which is: 5
-  result.to_float()
-    Which is: 4
-----------
-
-
-----------
-division test 5.3
-1.94447e+38 = 2 / 1.02856e-38
-01111111000000000000000000000000 = 01000000000000000000000000000000 / 00000000011100000000000000000000
-
-Expected equality of these values:
-  f_result
-    Which is: 1.94447e+38
-  result.to_float()
-    Which is: 1.70141e+38
-----------
-
-----------
-division test 5.4
-6.92306e+33 = 2 / 2.88889e-34
-00000000000000000000000000000000 = 01000000000000000000000000000000 / 00000111110000000000000000000000
-
-Expected equality of these values:
-  f_result
-    Which is: 6.92306e+33
-  result.to_float()
-    Which is: 0
-----------
-
-----------
-division test 5.5
-5.87747e-39 = 2 / 3.40282e+38
-00000000000000000000000000000000 = 01000000000000000000000000000000 / 01111111011111111111111111111111
-
-Expected equality of these values:
-  f_result
     Which is: 5.87747e-39
-  result.to_float()
-    Which is: 0
 ----------
 
 ----------
-division test 5.6
-5.87747e-39 = 2 / 3.40282e+38
-00000000000000000000000000000000 = 01000000000000000000000000000000 / 01111111011111111111111111111111
-
+division test 2.6
+0 = 5.87747e-39 / 3.40282e+38
+2097152 = 4194304 / 16777215
+01000001001000000000000000000000 = 00000000010000000000000000000000 / 01111111011111111111111111111111
+/home/piotr/Projects/Cpp/ieee754 cpp/ieee754_implementation/tests/mytests.cpp:252: Failure
 Expected equality of these values:
   f_result
-    Which is: 5.87747e-39
-  result.to_float()
     Which is: 0
+  result.to_float()
+    Which is: 10
 ----------
 
 
 ----------
-division test 6.4
-1.38461e+34 = 4 / 2.88889e-34
-00000000000000000000000000000000 = 01000000100000000000000000000000 / 00000111110000000000000000000000
-
+division test 1.10
+3.67336e-41 = 2.93874e-39 / 80
+1677721 = 2097152 / 10485760
+01111101100110011001100110011001 = 00000000001000000000000000000000 / 01000010101000000000000000000000
+/home/piotr/Projects/Cpp/ieee754 cpp/ieee754_implementation/tests/mytests.cpp:252: Failure
 Expected equality of these values:
   f_result
-    Which is: 1.38461e+34
+    Which is: 3.67336e-41
   result.to_float()
-    Which is: 0
+    Which is: 2.55212e+37
 ----------
 
 ----------
-division test 6.5
-1.17549e-38 = 4 / 3.40282e+38
-00000000000000000000000000000000 = 01000000100000000000000000000000 / 01111111011111111111111111111111
-
+division test 1.6
+0 = 2.93874e-39 / 3.40282e+38
+1048576 = 2097152 / 16777215
+01000001000100000000000000000000 = 00000000001000000000000000000000 / 01111111011111111111111111111111
+/home/piotr/Projects/Cpp/ieee754 cpp/ieee754_implementation/tests/mytests.cpp:252: Failure
 Expected equality of these values:
   f_result
-    Which is: 1.17549e-38
-  result.to_float()
     Which is: 0
-----------
-
-----------
-division test 6.6
-1.17549e-38 = 4 / 3.40282e+38
-00000000000000000000000000000000 = 01000000100000000000000000000000 / 01111111011111111111111111111111
-
-Expected equality of these values:
-  f_result
-    Which is: 1.17549e-38
   result.to_float()
-    Which is: 0
+    Which is: 9
 ----------
-
-
-----------
-division test 9.3
-28086.9 = 2.88889e-34 / 1.02856e-38
-01000110100000000000000000000000 = 00000111110000000000000000000000 / 00000000011100000000000000000000
-
-Expected equality of these values:
-  f_result
-    Which is: 28086.9
-  result.to_float()
-    Which is: 16384
-----------
-
