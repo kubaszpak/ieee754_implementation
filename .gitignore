@@ -31,11 +31,14 @@
 *.out
 *.app
 
-.vscode
+.vscode/
 googletest/
 build/
 presentation.pdf
 presentation.md
-images/
+prezentacja.md
+prezentacja.pdf
+Readme.pdf
 images.zip
 bitset_test.cpp
+images/
