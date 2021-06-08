@@ -90,7 +90,7 @@ Wszystkie z nich rozpoczynają się od sprawdzenia potencjalnych wyjątków:
 ```
 <br>
 
-- następnnym etapem w każdym operatorze jest przepisanie bitów mnożnika do bitsetu powiększonego o 0 lub 1 z przodu oraz ustawienie wykładnika na 1 zależnie od tego czy liczba jest zdenormalizowana czy nie
+- następnym etapem w każdym operatorze jest przepisanie bitów mnożnika do bitsetu powiększonego o 0 lub 1 z przodu oraz ustawienie wykładnika na 1 zależnie od tego czy liczba jest zdenormalizowana czy nie
 
 <br>
 
