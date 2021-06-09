@@ -36,9 +36,9 @@ googletest/
 build/
 presentation.pdf
 presentation.md
-prezentacja.md
+-- prezentacja.md
 prezentacja.pdf
 Readme.pdf
 images.zip
 bitset_test.cpp
-images/
+prezentacja_

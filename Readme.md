@@ -11,8 +11,8 @@
 | Wydział Elektroniki                   | Kierunek: Informatyka techniczna |
 | ------------------------------------- | -------------------------------- |
 | Grupa zajęciowa: środa 15:15-16:55 TP | Semestr 2020/21 LATO             |
-| 8 Łach Piotr                          | Nr indeksu: 256761               |
-| 13 Jakub Szpak                        | Nr indeksu: 252782               |
+| Piotr Łach                         | 8          |
+| Jakub Szpak                        | 13      |
 | Prowadzący:                           | Dr hab. inż. Tadeusz Tomczak     |
 
 <br>
@@ -259,5 +259,6 @@ Expected equality of these values:
     Which is: 0.285714
 ```
 
+Oprócz tego mamy problem z reprezentacjami typu NaN, ponieważ mimo wykorzystania funkcji isnan i pomijania tych przypadków nie znaleźliśmy funkcji wykrywającej -NaN w związku z tym wartość NaN jest w kodzie zakomentowana.
 
 Projekt uważamy za zakończony sukcesem, mimo dużej różnicy w czasie wykonywania między implementacją naszą, a implementacją programistów języka C++. Wydaję nam się, że cel był zdecydowanie inny, więc jesteśmy jak najbardziej zadowoleni z wyników! 
