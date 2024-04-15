@@ -1,6 +1,6 @@
 # Implementacja procedur obliczeń na liczbach zmiennoprzecinkowych <br> za pomocą instrukcji stałoprzecinkowych
-[![pl](https://img.shields.io/badge/lang-pl-blue.svg)](https://github.com/jonatasemidio/multilanguage-readme-pattern/blob/master/README.pl.md)
-[![en](https://img.shields.io/badge/lang-en-green.svg)](https://github.com/jonatasemidio/multilanguage-readme-pattern/blob/master/README.md)
+[![en](https://img.shields.io/badge/lang-en-green.svg)](https://github.com/ppiotrlach/ieee754_implementation/blob/master/README.pl.md)
+[![pl](https://img.shields.io/badge/lang-pl-blue.svg)](https://github.com/ppiotrlach/ieee754_implementation/blob/master/README.md)
 
 
 ## Organizacja i Architektura Komputerów

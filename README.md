@@ -1,6 +1,6 @@
 # IEEE-754 Implementation of floating-point number calculations using fixed-point instructions
-[![pl](https://img.shields.io/badge/lang-pl-blue.svg)](https://github.com/jonatasemidio/multilanguage-readme-pattern/blob/master/README.pl.md)
-[![en](https://img.shields.io/badge/lang-en-green.svg)](https://github.com/jonatasemidio/multilanguage-readme-pattern/blob/master/README.md)
+[![en](https://img.shields.io/badge/lang-en-green.svg)](https://github.com/ppiotrlach/ieee754_implementation/blob/master/README.pl.md)
+[![pl](https://img.shields.io/badge/lang-pl-blue.svg)](https://github.com/ppiotrlach/ieee754_implementation/blob/master/README.md)
 
 ## Project Information
 ### Course: Computer Organization and Architecture (INEK00027P)
